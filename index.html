@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>BookNest - Каталог книг</title>
+    </head>
+    <body>
+        <header>
+            <p><strong>BookNest</strong> - Библиотека книг</p>
+            <ul>
+                <li><a href="index.html" aria-current="page">Каталог</a></li>
+                <li><a href="book.html">Карточка книги</a></li>
+                <li><a href="loan.html">Выдача книги</a></li>
+            </ul>
+        </header>
+        <main>
+            <h1>Каталог кинг</h1>
+            <section aria-labelledby="filters-title">
+                <h2 id="filters-title">Фильтры каталога</h2>
+                <form action="#" method="get">
+                <fieldset>
+                    <legend>Параметры поиска</legend>
+                    <p>
+                        <label for="search-input">Поиск по названию или автору</label>
+                        <input type="search" id="search-input" name="query" placeholder="Например, Достоевский">
+                    </p>
+                    <p>
+                        <label for="genre-select">Жанр:</label>
+                        <select id="genre-select" name="genre">
+                            <option value="">Все Жанры</option>
+                            <option value="classic">Классика</option>
+                            <option value="sci-fi">Научная Фантастика</option>
+                            <option value="detective">Детектив</option>
+                        </select>
+                    </p>
+                    <p>
+                        <label for="sort-select">Сортировка:</label>
+                        <select id="sort-select" name="sort">
+                            <option value="popular">По популярности</option>
+                            <option value="newest">Новинки</option>
+                            <option value="rating">По рейтингу</option>
+                        </select>
+                    </p>
+                    <p>
+                        <input type="checkbox" id="available-only" name=" available" value="true">
+                        <label for="available-only">Только сейчас доступные</label>
+                    </p>
+                    <button type="submit">Применить Фильтры</button>
+                </fieldset>
+                </form>
+            </section>
+        </main>
+    </body>
+</html>
