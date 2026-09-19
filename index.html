@@ -8,11 +8,13 @@
     <body>
         <header>
             <p><strong>BookNest</strong> - Библиотека книг</p>
-            <ul>
-                <li><a href="index.html" aria-current="page">Каталог</a></li>
-                <li><a href="book.html">Карточка книги</a></li>
-                <li><a href="loan.html">Выдача книги</a></li>
-            </ul>
+            <nav aria-label="Основная навигация">
+                <ul>
+                    <li><a href="index.html" aria-current="page">Каталог</a></li>
+                    <li><a href="book.html">Карточка книги</a></li>
+                    <li><a href="loan.html">Выдача книги</a></li>
+                </ul>
+            </nav>
         </header>
         <main>
             <h1>Каталог кинг</h1>
@@ -44,16 +46,15 @@
                         </select>
                     </p>
                     <p>
-                        <input type="checkbox" id="available-only" name=" available" value="true">
+                        <input type="checkbox" id="available-only" name="available" value="true">
                         <label for="available-only">Только сейчас доступные</label>
                     </p>
                     <button type="submit">Применить Фильтры</button>
                 </fieldset>
                 </form>
             </section>
-            <section aria-labelledby="books-list=title">
+            <section aria-labelledby="books-list-title">
                 <h2 id="books-list-title">Список книг</h2>
-
                 <article>
                     <figure>
                         <img src="images/book1.jpg" alt="Обложка книги 'Преступление и наказание'" width="150" height="220">
@@ -122,5 +123,8 @@
                 </article>
             </section>
         </main>
+            <footer>
+                <p>&copy; 2026 BookNest. Все права защищены.</p>
+            </footer>
     </body>
 </html>
