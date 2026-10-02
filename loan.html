@@ -4,11 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>BookNest — Оформление выдачи книги</title>
+        <link rel="stylesheet" href="styles/tokens.css">
+        <link rel="stylesheet" href="styles/base.css">
+        <link rel="stylesheet" href="styles/layout.css">
+        <link rel="stylesheet" href="styles/components.css">
     </head>
     <body>
-        <header>
-            <p><strong>BookNest</strong> — Библиотека книг</p>
-            <nav aria-label="Основная навигация">
+        <header class="page-header">
+            <p><strong>BookNest</strong> - Библиотека книг</p>
+            <nav aria-label="Основная навигация" class="page-header-nav">
                 <ul>
                     <li><a href="index.html">Каталог</a></li>
                     <li><a href="book.html">Карточка книги</a></li>
@@ -17,70 +21,71 @@
             </nav>
         </header>
 
-        <main>
-            <h1>Заявка на выдачу книги</h1>
-            <p>Заполните форму ниже, чтобы забронировать книгу в библиотеке BookNest.</p>
+        <main class="page-main">
+            <div class="form-container">
+                <h1>Заявка на выдачу книги</h1>
+                <p>Заполните форму ниже, чтобы забронировать книгу в библиотеке BookNest.</p>
 
-            <form action="#" method="post">
-                <fieldset>
-                    <legend>Данные читателя</legend>
+                <form action="#" method="post" class="form-box">
+                    <fieldset>
+                        <legend>Данные читателя</legend>
+                        <p class="form-group">
+                            <label for="reader-name">ФИО полностью:</label>
+                            <input type="text" id="reader-name" name="full_name" required minlength="3" maxlength="100" placeholder="Иванов Иван Иванович" class="form-control">
+                        </p>
+
+                        <p class="form-group">
+                            <label for="reader-email">Электронная почта:</label>
+                            <input type="email" id="reader-email" name="email" required placeholder="ivanov@example.com" class="form-control">
+                        </p>
+                        <p class="form-group">
+                            <label for="reader-phone">Контактный телефон:</label>
+                            <input type="tel" id="reader-phone" name="phone" required pattern="[\+]?[0-9\s\-\(\)]{10,18}" placeholder="+7 (999) 000-00-00" class="form-control">
+                        </p>
+
+                        <p class="form-group">
+                            <label for="reader-ticket">Номер читательского билета (от 1000 до 99999):</label>
+                            <input type="number" id="reader-ticket" name="ticket_number" min="1000" max="99999" required placeholder="12345" class="form-control">
+                        </p>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>Параметры бронирования</legend>
+                        <p class="form-group">
+                            <label for="book-select">Выберите книгу:</label>
+                            <select id="book-select" name="book_id" required class="form-control">
+                                <option value="">-- Выберите книгу из каталога --</option>
+                                <option value="1" selected>Преступление и наказание — Ф. Достоевский</option>
+                                <option value="2">Пикник на обочине — А. и Б. Стругацкие</option>
+                                <option value="4">Ревизор — Н. Гоголь</option>
+                                <option value="5">Мёртвые души — Н. Гоголь</option>
+                            </select>
+                        </p>
+
+                        <p class="form-group">
+                            <label for="loan-date">Дата визита в библиотеку:</label>
+                            <input type="date" id="loan-date" name="loan_date" required min="2026-03-20" class="form-control">
+                        </p>
+
+                        <p class="form-group">
+                            <label for="loan-notes">Дополнительные пожелания к заказу:</label>
+                            <textarea id="loan-notes" name="notes" rows="4" cols="40" maxlength="300" placeholder="Укажите, если требуется конкретное издание или экземпляр для читального зала..." class="form-control"></textarea>
+                        </p>
+
+                        <p class="form-checkbox">
+                            <input type="checkbox" id="rules-agree" name="rules_agreement" required value="yes">
+                            <label for="rules-agree">Я подтверждаю согласие с <a href="#">правилами пользования библиотечным фондом</a></label>
+                        </p>
+                    </fieldset>
+
                     <p>
-                        <label for="reader-name">ФИО полностью:</label>
-                        <input type="text" id="reader-name" name="full_name" required minlength="3" maxlength="100" placeholder="Иванов Иван Иванович">
+                        <button type="submit" class="btn">Отправить заявку на выдачу</button>
                     </p>
-
-                    <p>
-                        <label for="reader-email">Электронная почта:</label>
-                        <input type="email" id="reader-email" name="email" required placeholder="ivanov@example.com">
-                    </p>
-                    <p>
-                        <label for="reader-phone">Контактный телефон:</label>
-                        <input type="tel" id="reader-phone" name="phone" required pattern="[\+]?[0-9\s\-\(\)]{10,18}" placeholder="+7 (999) 000-00-00">
-                    </p>
-
-                    <p>
-                        <label for="reader-ticket">Номер читательского билета (от 1000 до 99999):</label>
-                        <input type="number" id="reader-ticket" name="ticket_number" min="1000" max="99999" required placeholder="12345">
-                    </p>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Параметры бронирования</legend>
-                    <p>
-                        <label for="book-select">Выберите книгу:</label>
-                        <select id="book-select" name="book_id" required>
-                            <option value="">-- Выберите книгу из каталога --</option>
-                            <option value="1" selected>Преступление и наказание — Ф. Достоевский</option>
-                            <option value="2">Пикник на обочине — А. и Б. Стругацкие</option>
-                            <option value="4">Ревизор — Н. Гоголь</option>
-                            <option value="5">Мёртвые души — Н. Гоголь</option>
-                        </select>
-                    </p>
-
-                    <p>
-                        <label for="loan-date">Дата визита в библиотеку:</label>
-                        <input type="date" id="loan-date" name="loan_date" required min="2026-03-20">
-                    </p>
-
-                    <p>
-                        <label for="loan-notes">Дополнительные пожелания к заказу:</label>
-                        <textarea id="loan-notes" name="notes" rows="4" cols="40" maxlength="300" placeholder="Укажите, если требуется конкретное издание или экземпляр для читального зала..."></textarea>
-                    </p>
-
-                    <p>
-                        <input type="checkbox" id="rules-agree" name="rules_agreement" required value="yes">
-                        <label for="rules-agree">Я подтверждаю согласие с <a href="#">правилами пользования библиотечным фондом</a></label>
-                    </p>
-                </fieldset>
-
-                <p>
-                    <button type="submit">Отправить заявку на выдачу</button>
-                </p>
-
-            </form>
+                </form>
+            </div>
         </main>
-    <footer>
-        <p>&copy; 2026 BookNest. Все права защищены.</p>
-    </footer>
+        <footer class="page-footer">
+            <p>&copy; 2026 BookNest. Все права защищены.</p>
+        </footer>
     </body>
 </html>
