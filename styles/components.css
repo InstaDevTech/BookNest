@@ -1,0 +1,422 @@
+/* ==========================================================================
+   COMPONENTS (Cards, Buttons, Forms, Badges)
+   ========================================================================== */
+
+/* 1. Карточка книги */
+.book-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.book-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.book-card figure {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-muted);
+  margin-block-end: var(--space-sm);
+}
+
+.book-card figure::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg, 
+    transparent, 
+    rgba(255, 255, 255, 0.203), 
+    transparent
+  );
+  transform: skewX(-20deg);
+}
+
+.book-card:hover figure::after {
+  animation: sweep 2.2s ease-in-out infinite;
+}
+
+@keyframes sweep {
+  0% {
+    left: -150%;
+  }
+  100% {
+    left: 150%;
+  }
+}
+
+.book-card figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-card h3 {
+  font-size: var(--font-size-lg);
+  margin-block-end: var(--space-2xs);
+}
+
+.book-card h3 a {
+  text-decoration: none;
+  color: var(--color-text-main);
+}
+
+.book-card h3 a:hover {
+  color: var(--color-primary);
+}
+
+.book-card-author {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-2xs);
+}
+
+.book-card > p:not(.book-card-status):not(:last-child) {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-2xs);
+}
+
+/* Статус наличия */
+.book-card-status {
+  font-size: var(--font-size-xs);
+  font-weight: 600;
+  display: inline-block;
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-pill);
+  margin-block-end: var(--space-md);
+  width: fit-content;
+}
+
+.book-card-status--available {
+  background-color: var(--color-status-success-bg);
+  color: var(--color-status-success);
+}
+
+.book-card-status--unavailable {
+  background-color: var(--color-status-danger-bg);
+  color: var(--color-status-danger);
+}
+
+/* Кнопка "Взять книгу", прижатая к низу карточки */
+.book-card p:last-child a {
+  margin-block-start: auto; /* ПРИЖИМАЕТ КНОПКУ К НИЗУ КАРТОЧКИ */
+}
+
+/* 2. Универсальные кнопки */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: var(--space-xs) var(--space-md);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  background-color: var(--color-primary);
+  color: var(--color-text-inverse);
+  transition: background-color var(--transition-fast);
+}
+
+.btn:hover {
+  background-color: var(--color-primary-hover);
+  color: var(--color-text-inverse);
+}
+
+/* 3. Формы и фильтры */
+.form-box {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xl);
+}
+
+.form-box fieldset {
+  border: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.form-box legend {
+  font-family: var(--font-family-headings);
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+  margin-block-end: var(--space-md);
+  color: var(--color-text-main);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.form-group label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.form-control {
+  width: 100%;
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-page);
+  color: var(--color-text-main);
+  transition: border-color var(--transition-fast);
+}
+
+.form-control:focus-visible {
+  border-color: var(--color-primary);
+}
+
+.form-control:user-invalid,
+.form-control:invalid:not(:placeholder-shown):not(:focus) {
+  border-color: var(--color-status-danger);
+}
+
+.form-control:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--color-bg-muted);
+}
+
+/* Чекбокс */
+.form-checkbox {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  cursor: pointer;
+}
+
+textarea.form-control {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* 4. Хлебные крошки (Breadcrumbs) */
+.breadcrumbs {
+  margin-block-end: var(--space-lg);
+}
+
+.breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.breadcrumbs li:not(:last-child)::after {
+  content: "/";
+  margin-inline-start: var(--space-xs);
+  color: var(--color-border);
+}
+
+.breadcrumbs a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.breadcrumbs a:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+.breadcrumbs li[aria-current="page"] {
+  color: var(--color-text-main);
+  font-weight: 600;
+}
+
+/* 5. Карточка обложки и презентация книги */
+.book-cover-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.book-cover-card figure {
+  width: 100%;
+  max-width: 260px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  background-color: var(--color-bg-muted);
+}
+
+.book-cover-card figcaption {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin-block-start: var(--space-xs);
+}
+
+/* Характеристики книги (dl table) */
+.book-specs-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.book-specs-list {
+  display: grid;
+  grid-template-columns: minmax(130px, auto) 1fr;
+  gap: var(--space-xs) var(--space-md);
+  margin-block-end: var(--space-lg);
+  font-size: var(--font-size-sm);
+}
+
+.book-specs-list dt {
+  color: var(--color-text-muted);
+  font-weight: 500;
+  padding-block: var(--space-2xs);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.book-specs-list dd {
+  color: var(--color-text-main);
+  font-weight: 500;
+  padding-block: var(--space-2xs);
+  border-block-end: 1px solid var(--color-border);
+}
+
+/* Аннотация и секции на странице книги */
+.content-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-sm);
+  margin-block-end: var(--space-xl);
+}
+
+/* 6. Отзывы (Reviews) */
+.reviews-section {
+  margin-block-end: var(--space-2xl);
+}
+
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  margin-block-end: var(--space-xl);
+}
+
+.review-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.review-card-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  margin-block-end: var(--space-xs);
+}
+
+.review-card-author {
+  font-weight: 600;
+  color: var(--color-text-main);
+}
+
+.review-card-rating {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  color: var(--color-accent);
+  background-color: var(--color-bg-muted);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-pill);
+}
+
+.review-card-date {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-block-end: var(--space-xs);
+}
+
+/* 7. Похожие книги */
+.similar-card {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-sm);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.similar-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.similar-card figure {
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-muted);
+  margin-block-end: var(--space-xs);
+}
+
+.similar-card figure img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.similar-card h3 {
+  font-size: var(--font-size-sm);
+  margin-block-end: var(--space-2xs);
+}
+
+.similar-card h3 a {
+  text-decoration: none;
+  color: var(--color-text-main);
+}
+
+.similar-card h3 a:hover {
+  color: var(--color-primary);
+}
+
+.similar-card p {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin: 0;
+}
