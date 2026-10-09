@@ -1,0 +1,101 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html {
+  font-size: 100%;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  min-height: 100vh;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-base);
+  color: var(--color-text-main);
+  background-color: var(--color-bg-page);
+  display: flex;
+  flex-direction: column;
+}
+/* Картинки никогда не вылезают за контейнер */
+img,
+picture {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+figure {
+  margin: 0;
+}
+/* Заголовки */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-family-headings);
+  line-height: var(--line-height-tight);
+  color: var(--color-text-main);
+}
+h1 {
+  font-size: var(--font-size-3xl);
+  margin-block-end: var(--space-md);
+}
+h2 {
+  font-size: var(--font-size-2xl);
+  margin-block-end: var(--space-sm);
+}
+h3 {
+  font-size: var(--font-size-xl);
+  margin-block-end: var(--space-xs);
+}
+p {
+  margin-block-end: var(--space-md);
+}
+p:last-child {
+  margin-block-end: 0;
+}
+ul,
+ol {
+  list-style: none;
+}
+/* Ссылки */
+a {
+  color: var(--color-primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-fast);
+}
+a:hover {
+  color: var(--color-primary-hover);
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+/* Видимый фокус для клавиатуры (Accessibility) */
+:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-offset);
+}
+/* Отключение резких анимаций для чувствительных людей */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

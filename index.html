@@ -4,11 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>BookNest - Каталог книг</title>
+        <link rel="stylesheet" href="styles/tokens.css">
+        <link rel="stylesheet" href="styles/base.css">
+        <link rel="stylesheet" href="styles/layout.css">
+        <link rel="stylesheet" href="styles/components.css">
     </head>
     <body>
-        <header>
+        <header class="page-header">
             <p><strong>BookNest</strong> - Библиотека книг</p>
-            <nav aria-label="Основная навигация">
+            <nav aria-label="Основная навигация" class="page-header-nav">
                 <ul>
                     <li><a href="index.html" aria-current="page">Каталог</a></li>
                     <li><a href="book.html">Карточка книги</a></li>
@@ -16,114 +20,116 @@
                 </ul>
             </nav>
         </header>
-        <main>
-            <h1>Каталог кинг</h1>
+        <main class="page-main">
+            <h1>Каталог книг</h1>
+            <div class="catalog-layout">
             <section aria-labelledby="filters-title">
                 <h2 id="filters-title">Фильтры каталога</h2>
-                <form action="#" method="get">
+                <form action="#" method="get" class="form-box">
                 <fieldset>
                     <legend>Параметры поиска</legend>
-                    <p>
+                    <p class="form-group">
                         <label for="search-input">Поиск по названию или автору</label>
-                        <input type="search" id="search-input" name="query" placeholder="Например, Достоевский">
+                        <input type="search" id="search-input" name="query" placeholder="Например, Достоевский" class="form-control">
                     </p>
-                    <p>
+                    <p class="form-group">
                         <label for="genre-select">Жанр:</label>
-                        <select id="genre-select" name="genre">
+                        <select id="genre-select" name="genre" class="form-control">
                             <option value="">Все Жанры</option>
                             <option value="classic">Классика</option>
                             <option value="sci-fi">Научная Фантастика</option>
-                            <option value="detective">Роман</option>
-                            <option value="detective">Сатира</option>
+                            <option value="romance">Роман</option>
+                            <option value="satire">Сатира</option>
                         </select>
                     </p>
-                    <p>
+                    <p class="form-group">
                         <label for="sort-select">Сортировка:</label>
-                        <select id="sort-select" name="sort">
+                        <select id="sort-select" name="sort" class="form-control">
                             <option value="popular">По популярности</option>
                             <option value="newest">Новинки</option>
                             <option value="rating">По рейтингу</option>
                         </select>
                     </p>
-                    <p>
+                    <p class="form-checkbox">
                         <input type="checkbox" id="available-only" name="available" value="true">
-                        <label for="available-only">Только сейчас доступные</label>
+                        <label for="available-only">Только доступные</label>
                     </p>
-                    <button type="submit">Применить Фильтры</button>
+                    <button type="submit" class="btn">Применить Фильтры</button>
                 </fieldset>
                 </form>
             </section>
-            <section aria-labelledby="books-list-title">
+            <section aria-labelledby="books-list-title" class="books-grid">
                 <h2 id="books-list-title">Список книг</h2>
-                <article>
+                <article class="book-card">
                     <figure>
-                        <img src="images/book1.jpg" alt="Обложка книги 'Преступление и наказание'" width="150" height="220">
+                        <img src="images/book1.webp" alt="Обложка книги 'Преступление и наказание'" width="150" height="220">
                     </figure>
                     <h3><a href="book.html">Преступление и наказание</a></h3>
-                    <p>Автор: Фёдор Достоевский</p>
+                    <p class="book-card-author">Автор: Фёдор Достоевский</p>
                     <p>Жанр: Классическая проза</p>
                     <p>Год: <time datetime="1866">1866</time></p>
-                    <p>Статус: В наличии</p>
-                    <p><a href="loan.html">Взять книгу</a></p>
+                    <p class="book-card-status book-card-status--available">В наличии</p>
+                    <p><a href="loan.html" class="btn">Взять книгу</a></p>
                 </article>
-                <article>
+                <article class="book-card">
                     <figure>
-                        <img src="images/book2.jpg" alt="Обложка книги 'Пикник на обочине'" width="150" height="220">
+                        <img src="images/book2.webp" alt="Обложка книги 'Пикник на обочине'" width="150" height="220">
                     </figure>
                     <h3><a href="book.html">Пикник на обочине</a></h3>
-                    <p>Автор: Борис Стругацкий, Аркадий Стругацкий</p>
+                    <p class="book-card-author">Автор: Борис Стругацкий, Аркадий Стругацкий</p>
                     <p>Жанр: Научная Фантастика</p>
                     <p>Год: <time datetime="1972">1972</time></p>
-                    <p>Статус: В наличии</p>
-                    <p><a href="loan.html">Взять книгу</a></p>
+                    <p class="book-card-status book-card-status--available">В наличии</p>
+                    <p><a href="loan.html" class="btn">Взять книгу</a></p>
                 </article>
-                <article>
+                <article class="book-card">
                     <figure>
-                        <img src="images/book3.jpg" alt="Обложка книги 'Муму'" width="150" height="220">
+                        <img src="images/book3.webp" alt="Обложка книги 'Муму'" width="150" height="220">
                     </figure>
                     <h3><a href="book.html">Муму</a></h3>
-                    <p>Автор: Иван Тургенев</p>
+                    <p class="book-card-author">Автор: Иван Тургенев</p>
                     <p>Жанр: Роман</p>
                     <p>Год: <time datetime="1854">1854</time></p>
-                    <p>Статус: Нет в наличии</p>
-                    <p><a href="loan.html">Взять книгу</a></p>
+                    <p class="book-card-status book-card-status--unavailable">Нет в наличии</p>
+                    <p><a href="loan.html" class="btn">Взять книгу</a></p>
                 </article>
-                <article>
+                <article class="book-card">
                     <figure>
-                        <img src="images/book4.jpg" alt="Обложка книги 'Ревизор'" width="150" height="220">
+                        <img src="images/book4.webp" alt="Обложка книги 'Ревизор'" width="150" height="220">
                     </figure>
                     <h3><a href="book.html">Ревизор</a></h3>
-                    <p>Автор: Николай Гоголь</p>
+                    <p class="book-card-author">Автор: Николай Гоголь</p>
                     <p>Жанр: Сатира</p>
                     <p>Год: <time datetime="1836">1836</time></p>
-                    <p>Статус: В наличии</p>
-                    <p><a href="loan.html">Взять книгу</a></p>
+                    <p class="book-card-status book-card-status--available">В наличии</p>
+                    <p><a href="loan.html" class="btn">Взять книгу</a></p>
                 </article>
-                <article>
+                <article class="book-card">
                     <figure>
-                        <img src="images/book5.jpg" alt="Обложка книги 'Мертвые Души'" width="150" height="220">
+                        <img src="images/book5.webp" alt="Обложка книги 'Мертвые Души'" width="150" height="220">
                     </figure>
                     <h3><a href="book.html">Мертвые души</a></h3>
-                    <p>Автор: Николай Гоголь</p>
+                    <p class="book-card-author">Автор: Николай Гоголь</p>
                     <p>Жанр: Сатира</p>
                     <p>Год: <time datetime="1842">1842</time></p>
-                    <p>Статус: В наличии</p>
-                    <p><a href="loan.html">Взять книгу</a></p>
+                    <p class="book-card-status book-card-status--available">В наличии</p>
+                    <p><a href="loan.html" class="btn">Взять книгу</a></p>
                 </article>
-                <article>
+                <article class="book-card">
                     <figure>
-                        <img src="images/book6.jpg" alt="Обложка книги 'Евгений Онегин'" width="150" height="220">
+                        <img src="images/book6.webp" alt="Обложка книги 'Евгений Онегин'" width="150" height="220">
                     </figure>
                     <h3><a href="book.html">Евгений Онегин</a></h3>
-                    <p>Автор: Александр Пушкин</p>
+                    <p class="book-card-author">Автор: Александр Пушкин</p>
                     <p>Жанр: Классическая проза</p>
                     <p>Год: <time datetime="1833">1833</time></p>
-                    <p>Статус: Нет в наличии</p>
-                    <p><a href="loan.html">Взять книгу</a></p>
+                    <p class="book-card-status book-card-status--unavailable">Нет в наличии</p>
+                    <p><a href="loan.html" class="btn">Взять книгу</a></p>
                 </article>
             </section>
+            </div>
         </main>
-            <footer>
+            <footer class="page-footer">
                 <p>&copy; 2026 BookNest. Все права защищены.</p>
             </footer>
     </body>
