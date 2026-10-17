@@ -34,7 +34,8 @@
                             <legend>Параметры поиска</legend>
                             <p class="form-group">
                                 <label for="search-input">Поиск по названию или автору</label>
-                                <input type="search" id="search-input" name="query" placeholder="Например, Достоевский" class="form-control">
+                                <input type="search" id="search-input" name="query" placeholder="Например, Достоевский (мин. 2 символа)" minlength="2" class="form-control">
+                                <small id="search-hint" class="form-hint">Введите минимум 2 символа для поиска по API</small>
                             </p>
                             <p class="form-group">
                                 <label for="genre-select">Жанр:</label>
@@ -69,18 +70,39 @@
 
                 <section aria-labelledby="books-list-title" class="catalog-content">
                     <div class="catalog-content-header">
-                        <h2 id="books-list-title">Список книг</h2>
-                        <p id="results-count" class="results-count" aria-live="polite">Найдено книг: 40</p>
+                        <h2 id="books-list-title">Список книг (Open Library API)</h2>
+                        <p id="results-count" class="results-count" aria-live="polite">Загрузка каталога...</p>
                     </div>
 
-                    <div id="empty-state" class="empty-state" hidden>
+                    <div id="loading-state" class="state-box loading-state" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p class="state-title">Загружаем книги из Open Library...</p>
+                        <p class="state-text">Пожалуйста, подождите, выполняется сетевой запрос.</p>
+                    </div>
+
+                    <div id="error-state" class="state-box error-state" role="alert" hidden>
+                        <p id="error-state-title" class="state-title">Ошибка загрузки данных</p>
+                        <p id="error-state-text" class="state-text">Не удалось получить список книг. Проверьте подключение и попробуйте снова.</p>
+                        <button type="button" id="retry-btn" class="btn">Повторить</button>
+                    </div>
+
+                    <div id="empty-state" class="state-box empty-state" hidden>
                         <p class="empty-state-title">Ничего не найдено</p>
-                        <p class="empty-state-text">Попробуйте изменить поисковый запрос или сбросить фильтры.</p>
+                        <p class="empty-state-text">По вашему запросу в базе Open Library нет подходящих книг. Попробуйте изменить запрос или сбросить фильтры.</p>
                         <button type="button" id="empty-reset-btn" class="btn btn-secondary">Сбросить фильтры</button>
                     </div>
 
-                    <div id="books-list-container" class="books-grid">
-                        <!-- Карточки книг динамически отрисовываются через ui/render.js -->
+                    <div id="success-state" hidden>
+                        <div id="books-list-container" class="books-grid"></div>
+
+                        <nav id="pagination-controls" class="pagination-bar" aria-label="Пагинация каталога">
+                            <div class="pagination-buttons">
+                                <button type="button" id="prev-page-btn" class="btn btn-secondary pagination-btn" disabled>&larr; Назад</button>
+                                <span id="page-indicator" class="pagination-info" aria-live="polite">Страница 1 из 1</span>
+                                <button type="button" id="next-page-btn" class="btn btn-secondary pagination-btn" disabled>Вперёд &rarr;</button>
+                            </div>
+                            <button type="button" id="load-more-btn" class="btn btn-outline load-more-btn">Показать ещё 20 книг</button>
+                        </nav>
                     </div>
                 </section>
             </div>
