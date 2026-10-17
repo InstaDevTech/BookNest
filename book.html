@@ -25,57 +25,71 @@
                 <ol>
                     <li><a href="index.html">Главная</a></li>
                     <li><a href="index.html">Каталог</a></li>
-                    <li><a href="index.html">Классическая проза</a></li>
-                    <li aria-current="page">Преступление и наказание</li>
+                    <li id="breadcrumb-book-title" aria-current="page">Загрузка книги...</li>
                 </ol>
             </nav>
 
-            <article itemscope itemtype="https://schema.org/Book">
+            <div id="book-loading-state" class="state-box loading-state" role="status" aria-live="polite">
+                <div class="spinner" aria-hidden="true"></div>
+                <p class="state-title">Загружаем карточку книги из Open Library...</p>
+                <p class="state-text">Получаем описание, рейтинг и сведения об издании.</p>
+            </div>
+
+            <div id="book-error-state" class="state-box error-state" role="alert" hidden>
+                <p id="book-error-title" class="state-title">Книга не найдена (Ошибка 404)</p>
+                <p id="book-error-text" class="state-text">Не удалось загрузить информацию о книге. Возможно, указан неверный идентификатор.</p>
+                <div class="book-details-actions">
+                    <button type="button" id="book-retry-btn" class="btn">Повторить</button>
+                    <a href="index.html" class="btn btn-secondary">Вернуться в каталог</a>
+                </div>
+            </div>
+
+            <article id="book-success-state" itemscope itemtype="https://schema.org/Book" hidden>
                 <div class="book-details-layout">
                     <div class="book-cover-card">
                         <figure>
-                            <img src="images/book1.webp" alt="Обложка романа Федора Достоевского 'Преступление и наказание'" width="260" height="380" itemprop="image">
+                            <img id="book-detail-cover" src="images/bookcoverfake.webp" alt="Обложка книги" width="260" height="380" itemprop="image">
                         </figure>
-                        <figcaption>Иллюстрированное издание романа</figcaption>
+                        <figcaption id="book-detail-caption">Издание из каталога Open Library</figcaption>
                     </div>
 
                     <div class="book-details-main">
-                        <h1 itemprop="name">Преступление и наказание</h1>
-                        <p class="book-card-author">Автор: <span itemprop="author" itemscope itemtype="https://schema.org/Person"><span itemprop="name">Фёдор Михайлович Достоевский</span></span></p>
+                        <h1 id="book-detail-title" itemprop="name">Преступление и наказание</h1>
+                        <p class="book-card-author">Автор: <span itemprop="author" itemscope itemtype="https://schema.org/Person"><span id="book-detail-author" itemprop="name">Фёдор Михайлович Достоевский</span></span></p>
 
                         <section aria-labelledby="specs-title" class="book-specs-card">
                             <h2 id="specs-title">Характеристики издания</h2>
                             <dl class="book-specs-list">
-                                <dt>Жанр</dt>
-                                <dd itemprop="genre">Классическая русская литература, психологический роман</dd>
+                                <dt>Жанр / Темы</dt>
+                                <dd id="book-detail-genre" itemprop="genre">Классическая русская литература, психологический роман</dd>
 
-                                <dt>Год публикации</dt>
-                                <dd><time datetime="1866" itemprop="datePublished">1866 год</time></dd>
+                                <dt>Год первой публикации</dt>
+                                <dd id="book-detail-year" itemprop="datePublished">1866</dd>
 
-                                <dt>Язык оригинала</dt>
-                                <dd itemprop="inLanguage">Русский</dd>
+                                <dt>Язык</dt>
+                                <dd id="book-detail-lang" itemprop="inLanguage">Русский / Английский</dd>
 
-                                <dt>Страниц</dt>
-                                <dd itemprop="numberOfPages">672</dd>
+                                <dt>Страниц / Рейтинг</dt>
+                                <dd id="book-detail-pages" itemprop="numberOfPages">520 стр. · ★ 4.7</dd>
 
-                                <dt>Номер (ISBN)</dt>
-                                <dd itemprop="isbn">978-5-17-092523-2</dd>
+                                <dt>Идентификатор (ID / ISBN)</dt>
+                                <dd id="book-detail-isbn" itemprop="isbn">OL166894W</dd>
 
                                 <dt>Статус</dt>
-                                <dd><span class="book-card-status book-card-status--available">В наличии</span> (читальный зал и абонемент)</dd>
+                                <dd><span id="book-detail-status" class="book-card-status book-card-status--available">В наличии</span> (электронный и читальный зал)</dd>
                             </dl>
-                            <a href="loan.html" class="btn">Оформить заявку на выдачу книги</a>
+                            <div class="book-details-actions">
+                                <button type="button" id="book-wishlist-btn" class="btn btn-wishlist" aria-pressed="false">♡ Хочу прочитать</button>
+                                <a href="loan.html" class="btn">Оформить заявку на выдачу книги</a>
+                            </div>
                         </section>
                     </div>
                 </div>
 
                 <section aria-labelledby="desc-title" class="content-card">
                     <h2 id="desc-title">Аннотация к книге</h2>
-                    <p itemprop="description">
-                        Один из величайших романов в мировой литературе. В центре повествования — бывший студент Родион Раскольников, решившийся на убийство старухи-процентщицы ради проверки своей теории о «право имеющих» и «тварях дрожащих».
-                    </p>
-                    <p>
-                        Произведение глубоко исследует психологию преступника, феномен мук совести и возможность духовного перерождения человека через искупление и любовь.
+                    <p id="book-detail-description" itemprop="description">
+                        Загрузка описания...
                     </p>
                 </section>
             </article>
@@ -133,22 +147,16 @@
                 </section>
             </section>
 
-            <aside aria-labelledby="similar-title" class="content-card">
-                <h2 id="similar-title">Похожие книги</h2>
-                <div class="similar-books-grid">
+            <aside id="similar-books-section" aria-labelledby="similar-title" class="content-card">
+                <h2 id="similar-title">Похожие книги (по жанру и эпохе)</h2>
+                <p id="similar-subtitle" class="results-count">Подбираем книги со схожей тематикой и близким годом публикации...</p>
+                <div id="similar-books-container" class="similar-books-grid">
                     <article class="similar-card">
                         <figure>
-                            <img src="images/book5.webp" alt="Обложка книги 'Мёртвые души'" width="180" height="260">
+                            <img src="images/bookcoverfake.webp" alt="Заглушка обложки книги" width="180" height="260">
                         </figure>
-                        <h3><a href="book.html">Мёртвые души</a></h3>
-                        <p>Николай Гоголь</p>
-                    </article>
-                    <article class="similar-card">
-                        <figure>
-                            <img src="images/book6.webp" alt="Обложка книги 'Евгений Онегин'" width="180" height="260">
-                        </figure>
-                        <h3><a href="book.html">Евгений Онегин</a></h3>
-                        <p>Александр Пушкин</p>
+                        <h3><a href="book.html?id=OL166894W">Загрузка...</a></h3>
+                        <p>Open Library</p>
                     </article>
                 </div>
             </aside>
@@ -156,5 +164,6 @@
         <footer class="page-footer">
             <p>&copy; 2026 BookNest. Все права защищены.</p>
         </footer>
+        <script type="module" src="book.js"></script>
     </body>
 </html>

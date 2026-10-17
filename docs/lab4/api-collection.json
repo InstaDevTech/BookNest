@@ -1,0 +1,106 @@
+{
+  "client": "Thunder Client",
+  "collectionName": "BookNest - Open Library API (Lab 4)",
+  "dateExported": "2026-10-17T08:50:00.000Z",
+  "version": "1.1",
+  "folders": [],
+  "requests": [
+    {
+      "_id": "req-search-books-01",
+      "colId": "col-openlibrary-lab4",
+      "containerId": "",
+      "name": "1. Поиск книг в каталоге (Search API)",
+      "url": "https://openlibrary.org/search.json?q=dostoevsky&limit=20&page=1&fields=key,title,author_name,author_key,first_publish_year,cover_i,subject,ratings_average,number_of_pages_median,isbn,ebook_access",
+      "method": "GET",
+      "sortNum": 10000,
+      "created": "2026-10-17T08:40:00.000Z",
+      "modified": "2026-10-17T08:45:00.000Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "params": [
+        {
+          "name": "q",
+          "value": "dostoevsky",
+          "isPath": false
+        },
+        {
+          "name": "limit",
+          "value": "20",
+          "isPath": false
+        },
+        {
+          "name": "page",
+          "value": "1",
+          "isPath": false
+        },
+        {
+          "name": "fields",
+          "value": "key,title,author_name,author_key,first_publish_year,cover_i,subject,ratings_average,number_of_pages_median,isbn,ebook_access",
+          "isPath": false
+        }
+      ],
+      "tests": []
+    },
+    {
+      "_id": "req-work-details-02",
+      "colId": "col-openlibrary-lab4",
+      "containerId": "",
+      "name": "2. Получение деталей книги по ID (Works API)",
+      "url": "https://openlibrary.org/works/OL166894W.json",
+      "method": "GET",
+      "sortNum": 20000,
+      "created": "2026-10-17T08:42:00.000Z",
+      "modified": "2026-10-17T08:45:00.000Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "params": [],
+      "tests": []
+    },
+    {
+      "_id": "req-author-details-03",
+      "colId": "col-openlibrary-lab4",
+      "containerId": "",
+      "name": "3. Получение данных автора и рейтинга (Authors & Ratings API)",
+      "url": "https://openlibrary.org/authors/OL22242A.json",
+      "method": "GET",
+      "sortNum": 30000,
+      "created": "2026-10-17T08:44:00.000Z",
+      "modified": "2026-10-17T08:45:00.000Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "params": [],
+      "tests": []
+    },
+    {
+      "_id": "req-work-not-found-04",
+      "colId": "col-openlibrary-lab4",
+      "containerId": "",
+      "name": "4. Проверка ошибки 404 (Несуществующий ID книги)",
+      "url": "https://openlibrary.org/works/OL000000000W.json",
+      "method": "GET",
+      "sortNum": 40000,
+      "created": "2026-10-17T08:46:00.000Z",
+      "modified": "2026-10-17T08:46:00.000Z",
+      "headers": [
+        {
+          "name": "Accept",
+          "value": "application/json"
+        }
+      ],
+      "params": [],
+      "tests": []
+    }
+  ]
+}
