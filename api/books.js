@@ -27,12 +27,7 @@ const GENRE_KEYWORDS = {
 };
 
 const FALLBACK_COVERS = [
-    'images/book1.webp',
-    'images/book2.webp',
-    'images/book3.webp',
-    'images/book4.webp',
-    'images/book5.webp',
-    'images/book6.webp',
+    'images/bookcoverfake.webp',
 ];
 
 // Получение URL обложки Open Library или локальной заглушки
@@ -259,3 +254,57 @@ export async function getBookDetails(workId, { signal } = {}) {
         subjects,
     };
 }
+
+// Поиск действительно похожих книг по тому же жанру/теме и близкому году издания
+export async function getSimilarBooks(book, { limit = 4, signal } = {}) {
+    if (!book) return [];
+
+    const primarySubject =
+        Array.isArray(book.subjects) && book.subjects.length > 0
+            ? book.subjects.find((s) => s.length > 3 && !s.toLowerCase().includes('translation')) || book.subjects[0]
+            : '';
+
+    const primaryAuthor = book.author && book.author !== 'Автор Open Library'
+        ? book.author.split(',')[0].trim()
+        : '';
+
+    const searchQuery = primarySubject || primaryAuthor || 'classic literature';
+
+    const data = await apiRequest('/search.json', {
+        params: {
+            q: searchQuery,
+            limit: 16,
+            fields: SEARCH_FIELDS,
+        },
+        signal,
+        retryOn5xx: false,
+    });
+
+    const docs = Array.isArray(data.docs) ? data.docs : [];
+    const currentId = cleanWorkId(book.id);
+    const targetYearMatch = String(book.year || '').match(/\d{4}/);
+    const targetYear = targetYearMatch ? Number(targetYearMatch[0]) : null;
+
+    const candidates = docs
+        .map((doc, idx) => mapSearchDocToBook(doc, idx))
+        .filter((item) => item.id && item.id !== currentId && item.title !== book.title);
+
+    // Сортируем кандидатов по близости года публикации и наличию обложки
+    candidates.sort((a, b) => {
+        const aHasCover = !a.cover.includes('bookcoverfake') ? 1 : 0;
+        const bHasCover = !b.cover.includes('bookcoverfake') ? 1 : 0;
+
+        if (targetYear) {
+            const aYear = typeof a.year === 'number' ? a.year : 9999;
+            const bYear = typeof b.year === 'number' ? b.year : 9999;
+            const diffA = Math.abs(aYear - targetYear) - aHasCover * 15;
+            const diffB = Math.abs(bYear - targetYear) - bHasCover * 15;
+            return diffA - diffB;
+        }
+
+        return bHasCover - aHasCover;
+    });
+
+    return candidates.slice(0, limit);
+}
+

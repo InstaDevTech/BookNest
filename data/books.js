@@ -20,7 +20,7 @@ export const books = [
         genre: 'classic',
         rating: 4.8,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 2,
@@ -30,7 +30,7 @@ export const books = [
         genre: 'classic',
         rating: 4.9,
         available: false,
-        cover: 'images/book6.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 3,
@@ -40,7 +40,7 @@ export const books = [
         genre: 'classic',
         rating: 4.7,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 4,
@@ -50,7 +50,7 @@ export const books = [
         genre: 'classic',
         rating: 4.5,
         available: true,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 5,
@@ -60,7 +60,7 @@ export const books = [
         genre: 'classic',
         rating: 4.8,
         available: false,
-        cover: 'images/book6.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 6,
@@ -70,7 +70,7 @@ export const books = [
         genre: 'classic',
         rating: 4.8,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 7,
@@ -80,7 +80,7 @@ export const books = [
         genre: 'classic',
         rating: 4.6,
         available: true,
-        cover: 'images/book4.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 8,
@@ -90,7 +90,7 @@ export const books = [
         genre: 'classic',
         rating: 4.9,
         available: true,
-        cover: 'images/book5.webp',
+        cover: 'images/bookcoverfake.webp',
     },
 
     // --- 2. НАУЧНАЯ ФАНТАСТИКА ---
@@ -102,7 +102,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.9,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 10,
@@ -112,7 +112,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.8,
         available: false,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 11,
@@ -122,7 +122,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.7,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 12,
@@ -132,7 +132,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.8,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 13,
@@ -142,7 +142,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.6,
         available: false,
-        cover: 'images/book4.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 14,
@@ -152,7 +152,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.4,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 15,
@@ -162,7 +162,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.3,
         available: true,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 16,
@@ -172,7 +172,7 @@ export const books = [
         genre: 'sci-fi',
         rating: 4.9,
         available: true,
-        cover: 'images/book5.webp',
+        cover: 'images/bookcoverfake.webp',
     },
 
     // --- 3. РОМАН ---
@@ -184,7 +184,7 @@ export const books = [
         genre: 'romance',
         rating: 4.2,
         available: false,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 18,
@@ -194,7 +194,7 @@ export const books = [
         genre: 'romance',
         rating: 4.4,
         available: true,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 19,
@@ -204,7 +204,7 @@ export const books = [
         genre: 'romance',
         rating: 4.9,
         available: true,
-        cover: 'images/book6.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 20,
@@ -214,7 +214,7 @@ export const books = [
         genre: 'romance',
         rating: 4.8,
         available: false,
-        cover: 'images/book6.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 21,
@@ -224,7 +224,7 @@ export const books = [
         genre: 'romance',
         rating: 4.6,
         available: true,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 22,
@@ -234,7 +234,7 @@ export const books = [
         genre: 'romance',
         rating: 4.7,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 23,
@@ -244,7 +244,7 @@ export const books = [
         genre: 'romance',
         rating: 4.9,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 24,
@@ -254,7 +254,7 @@ export const books = [
         genre: 'romance',
         rating: 4.7,
         available: false,
-        cover: 'images/book4.webp',
+        cover: 'images/bookcoverfake.webp',
     },
 
     // --- 4. САТИРА ---
@@ -266,7 +266,7 @@ export const books = [
         genre: 'satire',
         rating: 4.7,
         available: true,
-        cover: 'images/book4.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 26,
@@ -276,7 +276,7 @@ export const books = [
         genre: 'satire',
         rating: 4.8,
         available: true,
-        cover: 'images/book5.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 27,
@@ -286,7 +286,7 @@ export const books = [
         genre: 'satire',
         rating: 4.9,
         available: true,
-        cover: 'images/book5.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 28,
@@ -296,7 +296,7 @@ export const books = [
         genre: 'satire',
         rating: 4.8,
         available: false,
-        cover: 'images/book5.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 29,
@@ -306,7 +306,7 @@ export const books = [
         genre: 'satire',
         rating: 4.9,
         available: true,
-        cover: 'images/book4.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 30,
@@ -316,7 +316,7 @@ export const books = [
         genre: 'satire',
         rating: 4.6,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 31,
@@ -326,7 +326,7 @@ export const books = [
         genre: 'satire',
         rating: 4.5,
         available: false,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 32,
@@ -336,7 +336,7 @@ export const books = [
         genre: 'satire',
         rating: 4.8,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
 
     // --- 5. ДЕТЕКТИВ ---
@@ -348,7 +348,7 @@ export const books = [
         genre: 'detective',
         rating: 4.9,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 34,
@@ -358,7 +358,7 @@ export const books = [
         genre: 'detective',
         rating: 4.9,
         available: false,
-        cover: 'images/book4.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 35,
@@ -368,7 +368,7 @@ export const books = [
         genre: 'detective',
         rating: 4.9,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 36,
@@ -378,7 +378,7 @@ export const books = [
         genre: 'detective',
         rating: 4.8,
         available: true,
-        cover: 'images/book5.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 37,
@@ -388,7 +388,7 @@ export const books = [
         genre: 'detective',
         rating: 4.6,
         available: false,
-        cover: 'images/book3.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 38,
@@ -398,7 +398,7 @@ export const books = [
         genre: 'detective',
         rating: 4.7,
         available: true,
-        cover: 'images/book1.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 39,
@@ -408,7 +408,7 @@ export const books = [
         genre: 'detective',
         rating: 4.5,
         available: true,
-        cover: 'images/book6.webp',
+        cover: 'images/bookcoverfake.webp',
     },
     {
         id: 40,
@@ -418,6 +418,6 @@ export const books = [
         genre: 'detective',
         rating: 4.7,
         available: true,
-        cover: 'images/book2.webp',
+        cover: 'images/bookcoverfake.webp',
     },
 ];

@@ -9,13 +9,13 @@ export function createBookCard(book, isInWishlist) {
 
     const figure = document.createElement('figure');
     const img = document.createElement('img');
-    img.src = book.cover || 'images/book1.webp';
+    img.src = book.cover || 'images/bookcoverfake.webp';
     img.alt = `Обложка книги «${book.title}»`;
     img.width = 150;
     img.height = 220;
     img.loading = 'lazy';
     img.addEventListener('error', () => {
-        img.src = 'images/book1.webp';
+        img.src = 'images/bookcoverfake.webp';
     });
     figure.appendChild(img);
     card.appendChild(figure);

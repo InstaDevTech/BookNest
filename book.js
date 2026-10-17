@@ -1,8 +1,9 @@
-import { getBookDetails } from './api/books.js';
+import { getBookDetails, getSimilarBooks } from './api/books.js';
 import { getErrorMessage } from './ui/render.js';
 
 const STORAGE_KEY_WISHLIST = 'booknest_wishlist_v4';
 const DEFAULT_BOOK_ID = 'OL166894W';
+const FALLBACK_COVER = 'images/bookcoverfake.webp';
 
 let activeController = null;
 let currentBook = null;
@@ -31,15 +32,20 @@ function setBookUiState(uiState, error = null) {
     const loadingEl = document.getElementById('book-loading-state');
     const errorEl = document.getElementById('book-error-state');
     const successEl = document.getElementById('book-success-state');
+    const similarSection = document.getElementById('similar-books-section');
 
     if (loadingEl) loadingEl.hidden = uiState !== 'loading';
     if (errorEl) errorEl.hidden = uiState !== 'error';
     if (successEl) successEl.hidden = uiState !== 'success';
+    if (similarSection) similarSection.hidden = uiState === 'error';
 
     if (uiState === 'error') {
         const titleEl = document.getElementById('book-error-title');
         const textEl = document.getElementById('book-error-text');
+        const breadcrumbTitle = document.getElementById('breadcrumb-book-title');
         const msg = getErrorMessage(error);
+
+        if (breadcrumbTitle) breadcrumbTitle.textContent = 'Ошибка загрузки';
 
         if (Number(error?.status) === 404) {
             if (titleEl) titleEl.textContent = 'Книга не найдена (Ошибка 404)';
@@ -82,12 +88,12 @@ function renderBookDetails(book) {
 
     if (breadcrumbTitle) breadcrumbTitle.textContent = book.title;
     if (coverImg) {
-        coverImg.src = book.cover;
+        coverImg.src = book.cover || FALLBACK_COVER;
         coverImg.alt = `Обложка книги «${book.title}»`;
         coverImg.addEventListener(
             'error',
             () => {
-                coverImg.src = 'images/book1.webp';
+                coverImg.src = FALLBACK_COVER;
             },
             { once: true }
         );
@@ -105,6 +111,66 @@ function renderBookDetails(book) {
     if (descEl) descEl.textContent = book.description;
 
     syncWishlistButton(book.id);
+}
+
+// Отрисовка карточек похожих книг (схожая тема/жанр и близкий год издания)
+function renderSimilarBooks(similarBooks, baseBook) {
+    const container = document.getElementById('similar-books-container');
+    const subtitle = document.getElementById('similar-subtitle');
+    if (!container) return;
+
+    container.replaceChildren();
+
+    if (!Array.isArray(similarBooks) || similarBooks.length === 0) {
+        if (subtitle) {
+            subtitle.textContent = 'Похожие издания по данной тематике не найдены.';
+        }
+        return;
+    }
+
+    const mainSubject =
+        Array.isArray(baseBook?.subjects) && baseBook.subjects.length > 0
+            ? baseBook.subjects[0]
+            : 'выбранному жанру';
+
+    if (subtitle) {
+        subtitle.textContent = `Подобрано по теме «${mainSubject}» и близкому году публикации (${baseBook?.year || 'классика'}):`;
+    }
+
+    const fragment = document.createDocumentFragment();
+
+    similarBooks.forEach((item) => {
+        const card = document.createElement('article');
+        card.className = 'similar-card';
+
+        const figure = document.createElement('figure');
+        const img = document.createElement('img');
+        img.src = item.cover || FALLBACK_COVER;
+        img.alt = `Обложка книги «${item.title}»`;
+        img.width = 180;
+        img.height = 260;
+        img.loading = 'lazy';
+        img.addEventListener('error', () => {
+            img.src = FALLBACK_COVER;
+        });
+        figure.appendChild(img);
+
+        const h3 = document.createElement('h3');
+        const link = document.createElement('a');
+        link.href = `book.html?id=${encodeURIComponent(item.id)}`;
+        link.textContent = item.title;
+        h3.appendChild(link);
+
+        const metaP = document.createElement('p');
+        metaP.textContent = `${item.author} · ${item.year} г.`;
+
+        card.appendChild(figure);
+        card.appendChild(h3);
+        card.appendChild(metaP);
+        fragment.appendChild(card);
+    });
+
+    container.appendChild(fragment);
 }
 
 async function loadBookById(bookId) {
@@ -125,6 +191,10 @@ async function loadBookById(bookId) {
         currentBook = details;
         renderBookDetails(details);
         finalState = 'success';
+
+        // Подгружаем действительно похожие книги по теме и близкому году
+        const similar = await getSimilarBooks(details, { limit: 4, signal: controller.signal }).catch(() => []);
+        renderSimilarBooks(similar, details);
     } catch (error) {
         if (error.name === 'AbortError') {
             isAborted = true;
