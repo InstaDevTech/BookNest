@@ -3,130 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>BookNest - Каталог книг</title>
-        <link rel="stylesheet" href="styles/tokens.css">
-        <link rel="stylesheet" href="styles/base.css">
-        <link rel="stylesheet" href="styles/layout.css">
-        <link rel="stylesheet" href="styles/components.css">
+        <title>BookNest - Каталог книг (React)</title>
+        <link rel="stylesheet" href="/styles/tokens.css">
+        <link rel="stylesheet" href="/styles/base.css">
+        <link rel="stylesheet" href="/styles/layout.css">
+        <link rel="stylesheet" href="/styles/components.css">
     </head>
     <body>
+        <div id="root"></div>
         <script type="module" src="/src/main.tsx"></script>
-        <header class="page-header">
-            <p class="booknest-title"><strong>BookNest</strong> - Библиотека книг</p>
-            <nav aria-label="Основная навигация" class="page-header-nav">
-                <ul>
-                    <li><a href="index.html" aria-current="page">Каталог</a></li>
-                    <li><a href="book.html">Карточка книги</a></li>
-                    <li><a href="loan.html">Выдача книги</a></li>
-                </ul>
-            </nav>
-            <button type="button" id="wishlist-toggle-btn" class="btn btn-outline header-wishlist-btn" aria-haspopup="dialog" aria-expanded="false">
-                Мой список <span class="badge" id="wishlist-counter">0</span>
-            </button>
-        </header>
-
-        <main class="page-main">
-            <h1>Каталог книг</h1>
-            <div class="catalog-layout">
-                <section aria-labelledby="filters-title">
-                    <h2 id="filters-title">Фильтры каталога</h2>
-                    <form action="#" method="get" id="filters-form" class="form-box">
-                        <fieldset>
-                            <legend>Параметры поиска</legend>
-                            <p class="form-group">
-                                <label for="search-input">Поиск по названию или автору</label>
-                                <input type="search" id="search-input" name="query" placeholder="Например, Достоевский (мин. 2 символа)" minlength="2" class="form-control">
-                                <small id="search-hint" class="form-hint">Введите минимум 2 символа для поиска по API</small>
-                            </p>
-                            <p class="form-group">
-                                <label for="genre-select">Жанр:</label>
-                                <select id="genre-select" name="genre" class="form-control">
-                                    <option value="">Все Жанры</option>
-                                    <option value="classic">Классика</option>
-                                    <option value="sci-fi">Научная Фантастика</option>
-                                    <option value="romance">Роман</option>
-                                    <option value="satire">Сатира</option>
-                                    <option value="detective">Детектив</option>
-                                </select>
-                            </p>
-                            <p class="form-group">
-                                <label for="sort-select">Сортировка:</label>
-                                <select id="sort-select" name="sort" class="form-control">
-                                    <option value="title">По названию (А–Я)</option>
-                                    <option value="year">Новинки (новые сначала)</option>
-                                    <option value="rating">По рейтингу</option>
-                                </select>
-                            </p>
-                            <p class="form-checkbox">
-                                <input type="checkbox" id="available-only" name="available" value="true">
-                                <label for="available-only">Только доступные</label>
-                            </p>
-                            <div class="form-actions">
-                                <button type="submit" class="btn">Применить</button>
-                                <button type="button" id="reset-filters-btn" class="btn btn-secondary">Сбросить</button>
-                            </div>
-                        </fieldset>
-                    </form>
-                </section>
-
-                <section aria-labelledby="books-list-title" class="catalog-content">
-                    <div class="catalog-content-header">
-                        <h2 id="books-list-title">Список книг (Open Library API)</h2>
-                        <p id="results-count" class="results-count" aria-live="polite">Загрузка каталога...</p>
-                    </div>
-
-                    <div id="loading-state" class="state-box loading-state" role="status" aria-live="polite">
-                        <div class="spinner" aria-hidden="true"></div>
-                        <p class="state-title">Загружаем книги из Open Library...</p>
-                        <p class="state-text">Пожалуйста, подождите, выполняется сетевой запрос.</p>
-                    </div>
-
-                    <div id="error-state" class="state-box error-state" role="alert" hidden>
-                        <p id="error-state-title" class="state-title">Ошибка загрузки данных</p>
-                        <p id="error-state-text" class="state-text">Не удалось получить список книг. Проверьте подключение и попробуйте снова.</p>
-                        <button type="button" id="retry-btn" class="btn">Повторить</button>
-                    </div>
-
-                    <div id="empty-state" class="state-box empty-state" hidden>
-                        <p class="empty-state-title">Ничего не найдено</p>
-                        <p class="empty-state-text">По вашему запросу в базе Open Library нет подходящих книг. Попробуйте изменить запрос или сбросить фильтры.</p>
-                        <button type="button" id="empty-reset-btn" class="btn btn-secondary">Сбросить фильтры</button>
-                    </div>
-
-                    <div id="success-state" hidden>
-                        <div id="books-list-container" class="books-grid"></div>
-
-                        <nav id="pagination-controls" class="pagination-bar" aria-label="Пагинация каталога">
-                            <div class="pagination-buttons">
-                                <button type="button" id="prev-page-btn" class="btn btn-secondary pagination-btn" disabled>&larr; Назад</button>
-                                <span id="page-indicator" class="pagination-info" aria-live="polite">Страница 1 из 1</span>
-                                <button type="button" id="next-page-btn" class="btn btn-secondary pagination-btn" disabled>Вперёд &rarr;</button>
-                            </div>
-                            <button type="button" id="load-more-btn" class="btn btn-outline load-more-btn">Показать ещё 20 книг</button>
-                        </nav>
-                    </div>
-                </section>
-            </div>
-        </main>
-
-        <!-- Модальное окно "Мой список" -->
-        <dialog id="wishlist-modal" class="wishlist-dialog" aria-labelledby="wishlist-title">
-            <div class="wishlist-dialog-content">
-                <div class="wishlist-dialog-header">
-                    <h2 id="wishlist-title">Мой список желаемого</h2>
-                    <button type="button" id="wishlist-close-btn" class="btn-close" aria-label="Закрыть окно">&times;</button>
-                </div>
-                <div class="wishlist-dialog-body">
-                    <p id="wishlist-empty-msg" class="wishlist-empty" hidden>Ваш список пока пуст. Добавьте книги кнопкой «Хочу прочитать».</p>
-                    <ul id="wishlist-items-list" class="wishlist-list"></ul>
-                </div>
-            </div>
-        </dialog>
-
-        <footer class="page-footer">
-            <p>&copy; 2026 BookNest. Все права защищены.</p>
-        </footer>
-
-        <script type="module" src="main.js"></script>
     </body>
 </html>

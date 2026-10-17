@@ -1,3 +1,4 @@
+import type { RefObject } from 'react';
 import type { ThemeMode } from '../types.js';
 import { Badge } from './Badge.js';
 import { Button } from './Button.js';
@@ -7,6 +8,7 @@ export interface HeaderProps {
     isWishlistOpen: boolean;
     activeView: 'catalog' | 'details';
     theme: ThemeMode;
+    wishlistButtonRef?: RefObject<HTMLButtonElement | null>;
     onOpenWishlist: () => void;
     onNavigateCatalog: () => void;
     onNavigateDefaultBook: () => void;
@@ -18,6 +20,7 @@ export function Header({
     isWishlistOpen,
     activeView,
     theme,
+    wishlistButtonRef,
     onOpenWishlist,
     onNavigateCatalog,
     onNavigateDefaultBook,
@@ -71,15 +74,16 @@ export function Header({
                     {theme === 'dark' ? '☀ Светлая' : '🌙 Тёмная'}
                 </Button>
 
-                <Button
-                    variant="outline"
-                    className="header-wishlist-btn"
+                <button
+                    ref={wishlistButtonRef}
+                    type="button"
+                    className="btn btn-outline header-wishlist-btn"
                     aria-haspopup="dialog"
                     aria-expanded={isWishlistOpen}
                     onClick={onOpenWishlist}
                 >
                     Мой список <Badge variant="accent">{wishlistCount}</Badge>
-                </Button>
+                </button>
             </div>
         </header>
     );
