@@ -1,2 +1,4 @@
 COMMITS.txt
 TASK.txt
+node_modules/
+dist/
