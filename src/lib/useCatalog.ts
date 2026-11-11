@@ -1,103 +1,55 @@
-import { useEffect, useState } from 'react';
-import { PAGE_LIMIT, searchBooks } from '../api/books.js';
-import { ApiError } from '../api/client.js';
+﻿import { useEffect, useState } from 'react';
+import { useBooks } from '../hooks/useBooks.js';
+import { useDebounce } from '../hooks/useDebounce.js';
 import { DEFAULT_FILTERS, DEFAULT_SORT, loadInitialSettings, saveSettings } from './storage.js';
-import type { Book, CatalogFilters, GenreFilter, SortOption, UiState } from '../types.js';
+import type { CatalogFilters, GenreFilter, SortOption, UiState } from '../types.js';
 
 export const DEBOUNCE_DELAY_MS = 350;
 export const MIN_QUERY_LENGTH = 2;
 
 export function useCatalogState() {
     const initial = loadInitialSettings();
-    const [books, setBooks] = useState<Book[]>([]);
-    const [uiState, setUiState] = useState<UiState>('loading');
-    const [error, setError] = useState<ApiError | Error | null>(null);
     const [page, setPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
-    const [totalFound, setTotalFound] = useState(0);
-    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [appendMode, setAppendMode] = useState(false);
-    const [reloadKey, setReloadKey] = useState(0);
 
     const [searchDraft, setSearchDraft] = useState(initial.filters.query);
     const [filters, setFilters] = useState<CatalogFilters>(initial.filters);
     const [sortBy, setSortBy] = useState<SortOption>(initial.sortBy);
 
-    useEffect(() => {
-        const trimmed = searchDraft.trim();
-        if (trimmed.length > 0 && trimmed.length < MIN_QUERY_LENGTH) {
-            return;
+    // Поисковый запрос применяется после паузы в наборе; слишком короткий запрос игнорируется
+    const debouncedDraft = useDebounce(searchDraft.trim(), DEBOUNCE_DELAY_MS);
+    const [appliedDraft, setAppliedDraft] = useState(debouncedDraft);
+    if (debouncedDraft !== appliedDraft) {
+        setAppliedDraft(debouncedDraft);
+        if (debouncedDraft.length === 0 || debouncedDraft.length >= MIN_QUERY_LENGTH) {
+            setPage(1);
+            setAppendMode(false);
+            setFilters((prev) => (prev.query === debouncedDraft ? prev : { ...prev, query: debouncedDraft }));
         }
-        const timerId = setTimeout(() => {
-            setFilters((prev) => {
-                if (prev.query === trimmed) return prev;
-                setPage(1);
-                setAppendMode(false);
-                return { ...prev, query: trimmed };
-            });
-        }, DEBOUNCE_DELAY_MS);
-
-        return () => clearTimeout(timerId);
-    }, [searchDraft]);
+    }
 
     useEffect(() => {
         saveSettings(filters, sortBy);
     }, [filters, sortBy]);
 
-    useEffect(() => {
-        const controller = new AbortController();
-        let isAborted = false;
+    const { data, error, status, reload } = useBooks({
+        query: filters.query,
+        genre: filters.genre,
+        sort: sortBy,
+        page,
+        append: appendMode,
+    });
 
-        async function fetchCatalog() {
-            if (appendMode) {
-                setIsLoadingMore(true);
-            } else {
-                setUiState('loading');
-            }
-            setError(null);
-
-            let nextState: UiState = 'loading';
-            let caughtErr: ApiError | Error | null = null;
-
-            try {
-                const res = await searchBooks({
-                    query: filters.query,
-                    genre: filters.genre,
-                    sort: sortBy,
-                    page,
-                    limit: PAGE_LIMIT,
-                    signal: controller.signal,
-                });
-
-                setTotalFound(res.totalFound);
-                setTotalPages(res.totalPages);
-                setBooks((prev) => {
-                    if (!appendMode) return res.books;
-                    const existing = new Set(prev.map((b) => b.id));
-                    const fresh = res.books.filter((b) => !existing.has(b.id));
-                    return [...prev, ...fresh];
-                });
-                nextState = res.books.length > 0 || appendMode ? 'success' : 'empty';
-            } catch (err: unknown) {
-                if (err instanceof Error && err.name === 'AbortError') {
-                    isAborted = true;
-                    return;
-                }
-                caughtErr = err instanceof Error ? err : new ApiError('Ошибка сети', 0);
-                nextState = 'error';
-            } finally {
-                if (!isAborted) {
-                    setError(caughtErr);
-                    setUiState(nextState);
-                    setIsLoadingMore(false);
-                }
-            }
-        }
-
-        void fetchCatalog();
-        return () => controller.abort();
-    }, [filters.query, filters.genre, sortBy, page, appendMode, reloadKey]);
-
+    const books = data?.books ?? [];
+    const totalPages = data?.totalPages ?? 1;
+    const totalFound = data?.totalFound ?? 0;
+    const isLoadingMore = appendMode && status === 'loading' && data !== null;
+    const uiState: UiState =
+        status === 'error' ? 'error'
+        : isLoadingMore ? 'success'
+        : status === 'loading' ? 'loading'
+        : books.length === 0 ? 'empty'
+        : 'success';
     const handleGenreChange = (genre: GenreFilter) => {
         setPage(1);
         setAppendMode(false);
@@ -148,9 +100,10 @@ export function useCatalogState() {
         handleAvailableChange,
         handleSubmitSearch,
         handleResetFilters,
-        handleRetry: () => setReloadKey((k) => k + 1),
+        handleRetry: reload,
         handlePrevPage: () => { setAppendMode(false); setPage((p) => Math.max(1, p - 1)); },
         handleNextPage: () => { setAppendMode(false); setPage((p) => Math.min(totalPages, p + 1)); },
         handleLoadMore: () => { setAppendMode(true); setPage((p) => Math.min(totalPages, p + 1)); },
     };
 }
+

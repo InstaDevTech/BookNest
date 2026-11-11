@@ -1,7 +1,7 @@
-import { useEffect, useState, type SyntheticEvent } from 'react';
-import { FALLBACK_COVER, getBookDetails, getSimilarBooks } from '../api/books.js';
-import { ApiError } from '../api/client.js';
-import type { Book, BookDetails, UiState } from '../types.js';
+﻿import type { SyntheticEvent } from 'react';
+import { FALLBACK_COVER } from '../api/books.js';
+import { useBook } from '../hooks/useBooks.js';
+import type { UiState } from '../types.js';
 import { Badge } from './Badge.js';
 import { Button } from './Button.js';
 import { ErrorBox } from './ErrorBox.js';
@@ -22,47 +22,10 @@ export function BookDetailsView({
     onSelectBook,
     onBackToCatalog,
 }: BookDetailsViewProps) {
-    const [uiState, setUiState] = useState<UiState>('loading');
-    const [book, setBook] = useState<BookDetails | null>(null);
-    const [similar, setSimilar] = useState<Book[]>([]);
-    const [error, setError] = useState<ApiError | Error | null>(null);
-    const [reloadTrigger, setReloadTrigger] = useState(0);
-
-    useEffect(() => {
-        const controller = new AbortController();
-        let isAborted = false;
-
-        async function fetchDetails() {
-            setUiState('loading');
-            setError(null);
-            let nextState: UiState = 'loading';
-            let caughtErr: ApiError | Error | null = null;
-
-            try {
-                const details = await getBookDetails(bookId, { signal: controller.signal });
-                setBook(details);
-                nextState = 'success';
-                const related = await getSimilarBooks(details, { limit: 4, signal: controller.signal }).catch(() => []);
-                setSimilar(related);
-            } catch (err: unknown) {
-                if (err instanceof Error && err.name === 'AbortError') {
-                    isAborted = true;
-                    return;
-                }
-                caughtErr = err instanceof Error ? err : new ApiError('Ошибка загрузки', 0);
-                nextState = 'error';
-            } finally {
-                if (!isAborted) {
-                    setError(caughtErr);
-                    setUiState(nextState);
-                }
-            }
-        }
-
-        void fetchDetails();
-        return () => controller.abort();
-    }, [bookId, reloadTrigger]);
-
+    const { data, error, status, reload } = useBook(bookId);
+    const uiState: UiState = status;
+    const book = data?.book ?? null;
+    const similar = data?.similar ?? [];
     const handleCoverError = (event: SyntheticEvent<HTMLImageElement>) => {
         const target = event.currentTarget;
         if (!target.src.endsWith(FALLBACK_COVER)) target.src = FALLBACK_COVER;
@@ -79,7 +42,7 @@ export function BookDetailsView({
 
             {uiState === 'loading' && <Spinner title="Загружаем карточку книги из Open Library..." />}
             {uiState === 'error' && (
-                <ErrorBox error={error} onRetry={() => setReloadTrigger((n) => n + 1)} secondaryActionLabel="Вернуться в каталог" onSecondaryAction={onBackToCatalog} />
+                <ErrorBox error={error} onRetry={reload} secondaryActionLabel="Вернуться в каталог" onSecondaryAction={onBackToCatalog} />
             )}
 
             {uiState === 'success' && book && (
@@ -134,3 +97,4 @@ export function BookDetailsView({
         </div>
     );
 }
+
