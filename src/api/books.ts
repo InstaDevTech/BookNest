@@ -1,11 +1,15 @@
-import { apiRequest } from './client.js';
+import { ApiError, apiRequest } from './client.js';
+import { GENRES } from './genres.js';
+import { findLocalBook, isLocalBookId } from './localBooks.js';
 import type {
     Book,
     BookDetails,
+    BookInput,
     GenreFilter,
     GenreKey,
     SearchBooksResult,
     SortOption,
+    StoredBook,
 } from './types.js';
 
 export const PAGE_LIMIT = 20;
@@ -260,6 +264,54 @@ export async function searchBooks(options: SearchBooksParams = {}): Promise<Sear
     };
 }
 
+function mapLocalBookToDetails(book: StoredBook): BookDetails {
+    return {
+        id: book.id,
+        title: book.title,
+        author: book.author,
+        genreText: GENRES[book.genre],
+        year: String(book.year),
+        language: 'Не указан',
+        pages: '-',
+        isbn: book.isbn,
+        available: book.availableCopies > 0,
+        cover: '',
+        description: book.description || 'Аннотация отсутствует.',
+        rating: 0,
+        ratingsCount: 0,
+        subjects: [GENRES[book.genre]],
+    };
+}
+
+/** Значения для предзаполнения формы редактирования: запись backend или данные Open Library */
+export async function getBookForEdit(
+    bookId: string,
+    options: { signal?: AbortSignal | undefined } = {}
+): Promise<BookInput> {
+    const localBook = await findLocalBook(bookId, options.signal).catch((error: unknown) => {
+        if (isLocalBookId(bookId) || (error instanceof Error && error.name === 'AbortError')) throw error;
+        return null;
+    });
+    if (localBook) return localBook;
+    if (isLocalBookId(bookId)) throw new ApiError('Книга не найдена', 404);
+
+    const details = await getBookDetails(bookId, options);
+    const year = Number.parseInt(details.year, 10);
+    const genre = (Object.keys(GENRES) as GenreKey[]).find((key) =>
+        details.genreText.toLowerCase().includes(GENRES[key].toLowerCase())
+    );
+    return {
+        title: details.title,
+        author: details.author,
+        genre: genre ?? 'classic',
+        year: Number.isFinite(year) ? year : new Date().getFullYear(),
+        isbn: details.isbn.startsWith('OL-') ? '' : details.isbn,
+        totalCopies: 1,
+        availableCopies: details.available ? 1 : 0,
+        description: details.description,
+    };
+}
+
 export async function getBookDetails(
     workId: string,
     options: { signal?: AbortSignal | undefined } = {}
@@ -268,6 +320,14 @@ export async function getBookDetails(
     if (!cleanId) {
         throw new Error('Некорректный идентификатор книги');
     }
+
+    // Записи собственного backend (созданные и отредактированные через форму) приоритетнее Open Library
+    const localBook = await findLocalBook(cleanId, options.signal).catch((error: unknown) => {
+        if (isLocalBookId(cleanId) || (error instanceof Error && error.name === 'AbortError')) throw error;
+        return null;
+    });
+    if (localBook) return mapLocalBookToDetails(localBook);
+    if (isLocalBookId(cleanId)) throw new ApiError('Книга не найдена', 404);
 
     const [workData, ratingsData] = await Promise.all([
         apiRequest<OpenLibraryWorkResponse>(`/works/${cleanId}.json`, { signal: options.signal }),

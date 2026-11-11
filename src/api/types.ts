@@ -65,3 +65,19 @@ export interface SearchBooksResult {
     page: number;
     totalPages: number;
 }
+
+/** Значения формы книги, отправляемые на собственный backend */
+export interface BookInput {
+    title: string;
+    author: string;
+    genre: GenreKey;
+    year: number;
+    isbn: string;
+    totalCopies: number;
+    availableCopies: number;
+    description: string;
+}
+
+export interface StoredBook extends BookInput {
+    id: string;
+}
