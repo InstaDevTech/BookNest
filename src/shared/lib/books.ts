@@ -1,12 +1,7 @@
 import type { Book, CatalogFilters, GenreKey, SortOption } from '../../api/types.js';
+import { GENRES } from '../../api/genres.js';
 
-export const GENRES: Record<GenreKey, string> = {
-    classic: 'Классика',
-    'sci-fi': 'Научная Фантастика',
-    romance: 'Роман',
-    satire: 'Сатира',
-    detective: 'Детектив',
-};
+export { GENRES };
 
 // Фильтрация книг по поисковой строке, жанру и доступности (чистая функция без мутаций)
 export function filterBooks(items: readonly Book[], filters: CatalogFilters): Book[] {

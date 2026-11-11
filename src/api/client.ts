@@ -10,11 +10,14 @@ const CACHE_TTL_MS = 60 * 1000;
 
 export class ApiError extends Error {
     public readonly status: number;
+    /** Ошибки по полям формы (ответы 422 и 409), ключ - имя поля */
+    public readonly fieldErrors: Readonly<Record<string, string>>;
 
-    constructor(message: string, status = 0) {
+    constructor(message: string, status = 0, fieldErrors: Record<string, string> = {}) {
         super(message);
         this.name = 'ApiError';
         this.status = status;
+        this.fieldErrors = fieldErrors;
     }
 }
 
@@ -23,6 +26,26 @@ export interface ApiRequestOptions {
     signal?: AbortSignal | undefined;
     useCache?: boolean;
     retryOn5xx?: boolean;
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    body?: unknown;
+    baseUrl?: string;
+}
+
+/** Базовый адрес собственного backend (в разработке - эндпоинт-заглушка того же origin) */
+export const LOCAL_API_URL = window.location.origin;
+
+interface ErrorBody {
+    message?: string;
+    errors?: Record<string, string>;
+    field?: string;
+}
+
+async function readErrorBody(response: Response): Promise<ErrorBody | null> {
+    try {
+        return (await response.json()) as ErrorBody;
+    } catch {
+        return null;
+    }
 }
 
 function delay(ms: number, signal?: AbortSignal): Promise<void> {
@@ -43,10 +66,11 @@ function delay(ms: number, signal?: AbortSignal): Promise<void> {
 
 export function buildUrl(
     endpoint: string,
-    params: Record<string, string | number | undefined> = {}
+    params: Record<string, string | number | undefined> = {},
+    baseUrl: string = BASE_URL
 ): string {
     const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
-    const url = new URL(`${BASE_URL}${cleanEndpoint}`);
+    const url = new URL(`${baseUrl}${cleanEndpoint}`);
     const searchParams = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
@@ -67,8 +91,10 @@ export async function apiRequest<T>(
     endpoint: string,
     options: ApiRequestOptions = {}
 ): Promise<T> {
-    const { params = {}, signal, useCache = true, retryOn5xx = true } = options;
-    const url = buildUrl(endpoint, params);
+    const { params = {}, signal, method = 'GET', body, baseUrl, retryOn5xx = method === 'GET' } = options;
+    // Кэшируются только GET-запросы; изменяющие запросы не повторяются (иначе двойное создание)
+    const useCache = (options.useCache ?? true) && method === 'GET';
+    const url = buildUrl(endpoint, params, baseUrl);
 
     if (useCache && responseCache.has(url)) {
         const cached = responseCache.get(url);
@@ -86,10 +112,13 @@ export async function apiRequest<T>(
 
         try {
             const fetchInit: RequestInit = {
-                method: 'GET',
+                method,
+                // Единственное место, где формируются заголовки всех запросов
                 headers: {
                     Accept: 'application/json',
+                    ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
                 },
+                ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
             };
             if (signal) {
                 fetchInit.signal = signal;
@@ -103,9 +132,15 @@ export async function apiRequest<T>(
                     continue;
                 }
 
+                const errorBody = await readErrorBody(response);
+                const fieldErrors =
+                    errorBody?.errors ??
+                    (errorBody?.field ? { [errorBody.field]: errorBody.message ?? '' } : {});
                 throw new ApiError(
-                    `Ошибка HTTP ${response.status}: ${response.statusText || 'Неизвестная ошибка'}`,
-                    response.status
+                    errorBody?.message ??
+                        `Ошибка HTTP ${response.status}: ${response.statusText || 'Неизвестная ошибка'}`,
+                    response.status,
+                    fieldErrors
                 );
             }
 
