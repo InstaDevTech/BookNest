@@ -862,4 +862,37 @@ textarea.form-control {
 .data-table-sort-btn:hover {
   color: var(--color-primary);
 }
-
+
+/* Форма книги и обратная связь по ошибкам */
+.book-form .form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 0 1.25rem;
+}
+
+.book-form .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.field-error,
+.form-error {
+    margin: 0;
+    color: var(--color-status-danger);
+    font-weight: 600;
+}
+
+.form-error {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-status-danger);
+    border-radius: 0.5rem;
+    background: var(--color-status-danger-bg);
+}
+
+.form-control[aria-invalid='true'] {
+    border-color: var(--color-status-danger);
+    outline: 2px solid var(--color-status-danger);
+}
