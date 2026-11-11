@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { Badge } from '../../shared/ui/Badge.js';
 import { BookList } from './BookList.js';
 import { Button } from '../../shared/ui/Button.js';
@@ -22,7 +23,6 @@ export interface CatalogContentProps {
     wishlistIds: ReadonlySet<string>;
     onViewModeChange: (mode: CatalogViewMode) => void;
     onToggleWishlist: (book: Book) => void;
-    onSelectBook: (bookId: string) => void;
     onResetFilters: () => void;
     onRetry: () => void;
     onPrevPage: () => void;
@@ -42,7 +42,6 @@ export function CatalogContent({
     wishlistIds,
     onViewModeChange,
     onToggleWishlist,
-    onSelectBook,
     onResetFilters,
     onRetry,
     onPrevPage,
@@ -58,9 +57,7 @@ export function CatalogContent({
             header: 'Название',
             sortable: true,
             render: (b) => (
-                <a href={`#book/${encodeURIComponent(b.id)}`} onClick={(e) => { e.preventDefault(); onSelectBook(b.id); }}>
-                    {b.title}
-                </a>
+                <Link to={`/books/${encodeURIComponent(b.id)}`}>{b.title}</Link>
             ),
         },
         { key: 'author', header: 'Автор', sortable: true },
@@ -100,7 +97,7 @@ export function CatalogContent({
             {effectiveUiState === 'success' && (
                 <div>
                     {viewMode === 'grid' ? (
-                        <BookList books={visibleBooks} wishlistIds={wishlistIds} onToggleWishlist={onToggleWishlist} onSelectBook={onSelectBook} />
+                        <BookList books={visibleBooks} wishlistIds={wishlistIds} onToggleWishlist={onToggleWishlist} />
                     ) : (
                         <DataTable<Book> items={visibleBooks} columns={columns} getRowKey={(b) => b.id} caption="Таблица книг каталога" />
                     )}

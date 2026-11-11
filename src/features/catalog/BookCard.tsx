@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import type { SyntheticEvent } from 'react';
 import { FALLBACK_COVER } from '../../api/books.js';
 import { GENRES } from '../../shared/lib/books.js';
@@ -9,14 +10,12 @@ export interface BookCardProps {
     book: Book;
     isInWishlist: boolean;
     onToggleWishlist: (book: Book) => void;
-    onSelectBook: (bookId: string) => void;
 }
 
 export function BookCard({
     book,
     isInWishlist,
     onToggleWishlist,
-    onSelectBook,
 }: BookCardProps) {
     const genreLabel = GENRES[book.genre] ?? 'Классика';
     const birthNote = book.authorBirthDate ? ` (${book.authorBirthDate})` : '';
@@ -42,15 +41,7 @@ export function BookCard({
             </figure>
 
             <h3>
-                <a
-                    href={`#book/${encodeURIComponent(book.id)}`}
-                    onClick={(event) => {
-                        event.preventDefault();
-                        onSelectBook(book.id);
-                    }}
-                >
-                    {book.title}
-                </a>
+                <Link to={`/books/${encodeURIComponent(book.id)}`}>{book.title}</Link>
             </h3>
 
             <p className="book-card-author">
@@ -76,9 +67,7 @@ export function BookCard({
                     {isInWishlist ? '✓ В желаемом' : '♡ Хочу прочитать'}
                 </Button>
 
-                <Button variant="secondary" onClick={() => onSelectBook(book.id)}>
-                    Подробнее о книге
-                </Button>
+                <Link className="btn btn-secondary" to={`/books/${encodeURIComponent(book.id)}`}>Подробнее о книге</Link>
             </div>
         </article>
     );

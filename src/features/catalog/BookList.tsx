@@ -5,14 +5,12 @@ export interface BookListProps {
     books: readonly Book[];
     wishlistIds: ReadonlySet<string>;
     onToggleWishlist: (book: Book) => void;
-    onSelectBook: (bookId: string) => void;
 }
 
 export function BookList({
     books,
     wishlistIds,
     onToggleWishlist,
-    onSelectBook,
 }: BookListProps) {
     return (
         <div className="books-grid">
@@ -22,7 +20,6 @@ export function BookList({
                     book={book}
                     isInWishlist={wishlistIds.has(book.id)}
                     onToggleWishlist={onToggleWishlist}
-                    onSelectBook={onSelectBook}
                 />
             ))}
         </div>

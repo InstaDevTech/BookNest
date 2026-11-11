@@ -1,4 +1,5 @@
-﻿import type { SyntheticEvent } from 'react';
+import type { SyntheticEvent } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { FALLBACK_COVER } from '../../api/books.js';
 import { useBook } from './useBook.js';
 import type { UiState } from '../../api/types.js';
@@ -11,17 +12,14 @@ export interface BookDetailsViewProps {
     bookId: string;
     isInWishlist: boolean;
     onToggleWishlist: (item: { id: string; title: string; author: string }) => void;
-    onSelectBook: (bookId: string) => void;
-    onBackToCatalog: () => void;
 }
 
 export function BookDetailsView({
     bookId,
     isInWishlist,
     onToggleWishlist,
-    onSelectBook,
-    onBackToCatalog,
 }: BookDetailsViewProps) {
+    const navigate = useNavigate();
     const { data, error, status, reload } = useBook(bookId);
     const uiState: UiState = status;
     const book = data?.book ?? null;
@@ -35,14 +33,14 @@ export function BookDetailsView({
         <div>
             <nav aria-label="Хлебные крошки" className="breadcrumbs">
                 <ol>
-                    <li><a href="#catalog" onClick={(e) => { e.preventDefault(); onBackToCatalog(); }}>Каталог</a></li>
+                    <li><Link to="/books">Каталог</Link></li>
                     <li aria-current="page">{uiState === 'success' && book ? book.title : 'Карточка книги'}</li>
                 </ol>
             </nav>
 
             {uiState === 'loading' && <Spinner title="Загружаем карточку книги из Open Library..." />}
             {uiState === 'error' && (
-                <ErrorBox error={error} onRetry={reload} secondaryActionLabel="Вернуться в каталог" onSecondaryAction={onBackToCatalog} />
+                <ErrorBox error={error} onRetry={reload} secondaryActionLabel="Вернуться в каталог" onSecondaryAction={() => navigate('/books')} />
             )}
 
             {uiState === 'success' && book && (
@@ -70,7 +68,7 @@ export function BookDetailsView({
                                         <Button variant="wishlist" active={isInWishlist} aria-pressed={isInWishlist} onClick={() => onToggleWishlist({ id: book.id, title: book.title, author: book.author })}>
                                             {isInWishlist ? '✓ В желаемом' : '♡ Хочу прочитать'}
                                         </Button>
-                                        <Button variant="secondary" onClick={onBackToCatalog}>&larr; В каталог</Button>
+                                        <Link className="btn btn-secondary" to="/books">&larr; В каталог</Link>
                                     </div>
                                 </section>
                             </div>
@@ -85,7 +83,7 @@ export function BookDetailsView({
                                 {similar.map((item) => (
                                     <article key={item.id} className="similar-card">
                                         <figure><img src={item.cover || FALLBACK_COVER} alt={item.title} width={180} height={260} loading="lazy" onError={handleCoverError} /></figure>
-                                        <h3><a href={`#book/${encodeURIComponent(item.id)}`} onClick={(e) => { e.preventDefault(); onSelectBook(item.id); }}>{item.title}</a></h3>
+                                        <h3><Link to={`/books/${encodeURIComponent(item.id)}`}>{item.title}</Link></h3>
                                         <p>{item.author} · {item.year} г.</p>
                                     </article>
                                 ))}
