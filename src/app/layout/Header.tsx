@@ -1,61 +1,45 @@
-import type { RefObject } from 'react';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import { useWishlist } from '../../features/wishlist/useWishlist.js';
+import { useAuth } from '../../shared/context/AuthContext.js';
 import { useTheme } from '../../shared/context/ThemeContext.js';
 import { Badge } from '../../shared/ui/Badge.js';
 import { Button } from '../../shared/ui/Button.js';
 
-export interface HeaderProps {
-    wishlistCount: number;
-    isWishlistOpen: boolean;
-    activeView: 'catalog' | 'details';
-    wishlistButtonRef?: RefObject<HTMLButtonElement | null>;
-    onOpenWishlist: () => void;
-    onNavigateCatalog: () => void;
-    onNavigateDefaultBook: () => void;
-}
-
-export function Header({
-    wishlistCount,
-    isWishlistOpen,
-    activeView,
-    wishlistButtonRef,
-    onOpenWishlist,
-    onNavigateCatalog,
-    onNavigateDefaultBook,
-}: HeaderProps) {
+export function Header() {
     const { theme, toggleTheme } = useTheme();
+    const { user, logout } = useAuth();
+    const wishlist = useWishlist();
+    const { pathname } = useLocation();
+
+    // «Каталог» активен и на карточке книги, но не на форме создания
+    const isCatalogActive = pathname.startsWith('/books') && pathname !== '/books/new';
+
     return (
         <header className="page-header">
             <p className="booknest-title">
-                <strong>BookNest</strong> - Библиотека книг
+                <Link to="/books"><strong>BookNest</strong></Link> - Библиотека книг
             </p>
             <nav aria-label="Основная навигация" className="page-header-nav">
                 <ul>
                     <li>
-                        <a
-                            href="#catalog"
-                            aria-current={activeView === 'catalog' ? 'page' : undefined}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                onNavigateCatalog();
-                            }}
-                        >
+                        <Link to="/books" aria-current={isCatalogActive ? 'page' : undefined}>
                             Каталог
-                        </a>
+                        </Link>
                     </li>
                     <li>
-                        <a
-                            href="#book/OL166894W"
-                            aria-current={activeView === 'details' ? 'page' : undefined}
-                            onClick={(event) => {
-                                event.preventDefault();
-                                onNavigateDefaultBook();
-                            }}
-                        >
-                            Карточка книги
-                        </a>
+                        <NavLink to="/books/new">Добавить книгу</NavLink>
                     </li>
                     <li>
-                        <a href="loan.html">Выдача книги</a>
+                        <NavLink to="/wishlist">
+                            Мой список <Badge variant="accent">{wishlist.items.length}</Badge>
+                        </NavLink>
+                    </li>
+                    <li>
+                        {user ? (
+                            <Link to="/login" onClick={logout}>Выйти ({user.name})</Link>
+                        ) : (
+                            <NavLink to="/login">Войти</NavLink>
+                        )}
                     </li>
                 </ul>
             </nav>
@@ -70,17 +54,6 @@ export function Header({
                 >
                     {theme === 'dark' ? '☀ Светлая' : '🌙 Тёмная'}
                 </Button>
-
-                <button
-                    ref={wishlistButtonRef}
-                    type="button"
-                    className="btn btn-outline header-wishlist-btn"
-                    aria-haspopup="dialog"
-                    aria-expanded={isWishlistOpen}
-                    onClick={onOpenWishlist}
-                >
-                    Мой список <Badge variant="accent">{wishlistCount}</Badge>
-                </button>
             </div>
         </header>
     );
