@@ -1,6 +1,6 @@
-﻿import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
 import { loadInitialTheme, saveTheme } from '../lib/storage.js';
-import type { ThemeMode } from '../types.js';
+import type { ThemeMode } from '../../api/types.js';
 
 interface ThemeContextValue {
     theme: ThemeMode;

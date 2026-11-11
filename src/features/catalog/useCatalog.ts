@@ -1,8 +1,8 @@
-﻿import { useEffect, useState } from 'react';
-import { useBooks } from '../hooks/useBooks.js';
-import { useDebounce } from '../hooks/useDebounce.js';
-import { DEFAULT_FILTERS, DEFAULT_SORT, loadInitialSettings, saveSettings } from './storage.js';
-import type { CatalogFilters, GenreFilter, SortOption, UiState } from '../types.js';
+import { useEffect, useState } from 'react';
+import { useBooks } from './useBooks.js';
+import { useDebounce } from '../../shared/hooks/useDebounce.js';
+import { DEFAULT_FILTERS, DEFAULT_SORT, loadInitialSettings, saveSettings } from '../../shared/lib/storage.js';
+import type { CatalogFilters, GenreFilter, SortOption, UiState } from '../../api/types.js';
 
 export const DEBOUNCE_DELAY_MS = 350;
 export const MIN_QUERY_LENGTH = 2;

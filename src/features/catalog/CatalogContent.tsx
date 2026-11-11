@@ -1,14 +1,14 @@
-import { Badge } from './Badge.js';
+import { Badge } from '../../shared/ui/Badge.js';
 import { BookList } from './BookList.js';
-import { Button } from './Button.js';
-import { DataTable, type DataTableColumn } from './DataTable.js';
-import { EmptyState } from './EmptyState.js';
-import { ErrorBox } from './ErrorBox.js';
-import { PaginationBar } from './PaginationBar.js';
-import { Spinner } from './Spinner.js';
-import { GENRES } from '../lib/books.js';
-import { ApiError } from '../api/client.js';
-import type { Book, CatalogViewMode, UiState } from '../types.js';
+import { Button } from '../../shared/ui/Button.js';
+import { DataTable, type DataTableColumn } from '../../shared/ui/DataTable.js';
+import { EmptyState } from '../../shared/ui/EmptyState.js';
+import { ErrorBox } from '../../shared/ui/ErrorBox.js';
+import { PaginationBar } from '../../shared/ui/PaginationBar.js';
+import { Spinner } from '../../shared/ui/Spinner.js';
+import { GENRES } from '../../shared/lib/books.js';
+import { ApiError } from '../../api/client.js';
+import type { Book, CatalogViewMode, UiState } from '../../api/types.js';
 
 export interface CatalogContentProps {
     uiState: UiState;

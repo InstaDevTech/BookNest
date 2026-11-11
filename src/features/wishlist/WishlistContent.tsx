@@ -1,6 +1,6 @@
-import type { WishlistItem } from '../types.js';
-import { Button } from './Button.js';
-import { EmptyState } from './EmptyState.js';
+import type { WishlistItem } from '../../api/types.js';
+import { Button } from '../../shared/ui/Button.js';
+import { EmptyState } from '../../shared/ui/EmptyState.js';
 
 export interface WishlistContentProps {
     items: readonly WishlistItem[];

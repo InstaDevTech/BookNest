@@ -1,4 +1,4 @@
-import type { CatalogFilters, SortOption, ThemeMode, WishlistItem } from '../types.js';
+import type { CatalogFilters, SortOption, ThemeMode, WishlistItem } from '../../api/types.js';
 
 const STORAGE_KEY_FILTERS = 'booknest_filters_v5';
 const STORAGE_KEY_WISHLIST = 'booknest_wishlist_v4';

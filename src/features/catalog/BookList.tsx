@@ -1,4 +1,4 @@
-import type { Book } from '../types.js';
+import type { Book } from '../../api/types.js';
 import { BookCard } from './BookCard.js';
 
 export interface BookListProps {

@@ -1,7 +1,7 @@
 ﻿import { useCallback } from 'react';
-import { getBookDetails, getSimilarBooks, PAGE_LIMIT, searchBooks } from '../api/books.js';
-import type { Book, BookDetails, GenreFilter, SortOption } from '../types.js';
-import { useFetch, type UseFetchResult } from './useFetch.js';
+import { PAGE_LIMIT, searchBooks } from '../../api/books.js';
+import type { Book, GenreFilter, SortOption } from '../../api/types.js';
+import { useFetch, type UseFetchResult } from '../../shared/hooks/useFetch.js';
 
 export interface UseBooksParams {
     query: string;
@@ -34,27 +34,6 @@ export function useBooks({ query, genre, sort, page, append }: UseBooksParams): 
             return { books, totalFound: last.totalFound, totalPages: last.totalPages };
         },
         [query, genre, sort, page, append]
-    );
-
-    return useFetch(fetcher);
-}
-
-export interface BookWithSimilar {
-    book: BookDetails;
-    similar: Book[];
-}
-
-export function useBook(bookId: string): UseFetchResult<BookWithSimilar> {
-    const fetcher = useCallback(
-        async (signal: AbortSignal): Promise<BookWithSimilar> => {
-            const book = await getBookDetails(bookId, { signal });
-            const similar = await getSimilarBooks(book, { limit: 4, signal }).catch((err: unknown) => {
-                if (err instanceof Error && err.name === 'AbortError') throw err;
-                return [] as Book[];
-            });
-            return { book, similar };
-        },
-        [bookId]
     );
 
     return useFetch(fetcher);

@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react';
-import type { CatalogFilters, GenreFilter, SortOption } from '../types.js';
-import { Button } from './Button.js';
+import type { CatalogFilters, GenreFilter, SortOption } from '../../api/types.js';
+import { Button } from '../../shared/ui/Button.js';
 
 export interface FiltersPanelProps {
     searchDraft: string;

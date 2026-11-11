@@ -1,9 +1,9 @@
 import type { SyntheticEvent } from 'react';
-import { FALLBACK_COVER } from '../api/books.js';
-import { GENRES } from '../lib/books.js';
-import type { Book } from '../types.js';
-import { Badge } from './Badge.js';
-import { Button } from './Button.js';
+import { FALLBACK_COVER } from '../../api/books.js';
+import { GENRES } from '../../shared/lib/books.js';
+import type { Book } from '../../api/types.js';
+import { Badge } from '../../shared/ui/Badge.js';
+import { Button } from '../../shared/ui/Button.js';
 
 export interface BookCardProps {
     book: Book;

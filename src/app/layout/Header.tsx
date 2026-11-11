@@ -1,7 +1,7 @@
-﻿import type { RefObject } from 'react';
-import { useTheme } from '../context/ThemeContext.js';
-import { Badge } from './Badge.js';
-import { Button } from './Button.js';
+import type { RefObject } from 'react';
+import { useTheme } from '../../shared/context/ThemeContext.js';
+import { Badge } from '../../shared/ui/Badge.js';
+import { Button } from '../../shared/ui/Button.js';
 
 export interface HeaderProps {
     wishlistCount: number;

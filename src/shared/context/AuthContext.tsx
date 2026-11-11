@@ -1,4 +1,4 @@
-﻿import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useState, type ReactNode } from 'react';
 import { loadFromStorage, saveToStorage } from '../lib/storage.js';
 
 export interface CurrentUser {

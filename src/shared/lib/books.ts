@@ -1,4 +1,4 @@
-import type { Book, CatalogFilters, GenreKey, SortOption } from '../types.js';
+import type { Book, CatalogFilters, GenreKey, SortOption } from '../../api/types.js';
 
 export const GENRES: Record<GenreKey, string> = {
     classic: 'Классика',

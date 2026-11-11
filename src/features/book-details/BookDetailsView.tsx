@@ -1,11 +1,11 @@
 ﻿import type { SyntheticEvent } from 'react';
-import { FALLBACK_COVER } from '../api/books.js';
-import { useBook } from '../hooks/useBooks.js';
-import type { UiState } from '../types.js';
-import { Badge } from './Badge.js';
-import { Button } from './Button.js';
-import { ErrorBox } from './ErrorBox.js';
-import { Spinner } from './Spinner.js';
+import { FALLBACK_COVER } from '../../api/books.js';
+import { useBook } from './useBook.js';
+import type { UiState } from '../../api/types.js';
+import { Badge } from '../../shared/ui/Badge.js';
+import { Button } from '../../shared/ui/Button.js';
+import { ErrorBox } from '../../shared/ui/ErrorBox.js';
+import { Spinner } from '../../shared/ui/Spinner.js';
 
 export interface BookDetailsViewProps {
     bookId: string;

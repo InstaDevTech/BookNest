@@ -1,4 +1,4 @@
-import { ApiError } from '../api/client.js';
+import { ApiError } from '../../api/client.js';
 import { Button } from './Button.js';
 
 export interface ErrorBoxProps {

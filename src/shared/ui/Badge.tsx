@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import type { BadgeVariant } from '../types.js';
+import type { BadgeVariant } from '../../api/types.js';
 
 export interface BadgeProps {
     variant?: BadgeVariant;

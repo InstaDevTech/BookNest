@@ -6,7 +6,7 @@ import type {
     GenreKey,
     SearchBooksResult,
     SortOption,
-} from '../types.js';
+} from './types.js';
 
 export const PAGE_LIMIT = 20;
 export const FALLBACK_COVER = 'images/bookcoverfake.webp';

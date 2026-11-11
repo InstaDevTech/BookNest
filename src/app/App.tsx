@@ -1,18 +1,18 @@
-﻿import { useEffect, useRef, useState } from 'react';
-import { BookDetailsView } from './components/BookDetailsView.js';
-import { CatalogContent } from './components/CatalogContent.js';
-import { FiltersPanel } from './components/FiltersPanel.js';
-import { Header } from './components/Header.js';
-import { Modal } from './components/Modal.js';
-import { WishlistContent } from './components/WishlistContent.js';
-import { getVisibleBooks } from './lib/books.js';
+import { useEffect, useRef, useState } from 'react';
+import { BookDetailsView } from '../features/book-details/BookDetailsView.js';
+import { CatalogContent } from '../features/catalog/CatalogContent.js';
+import { FiltersPanel } from '../features/catalog/FiltersPanel.js';
+import { Header } from './layout/Header.js';
+import { Modal } from '../shared/ui/Modal.js';
+import { WishlistContent } from '../features/wishlist/WishlistContent.js';
+import { getVisibleBooks } from '../shared/lib/books.js';
 import {
     loadInitialWishlist,
     saveWishlist,
-} from './lib/storage.js';
-import { MIN_QUERY_LENGTH, useCatalogState } from './lib/useCatalog.js';
-import { useTheme } from './context/ThemeContext.js';
-import type { CatalogViewMode, WishlistItem } from './types.js';
+} from '../shared/lib/storage.js';
+import { MIN_QUERY_LENGTH, useCatalogState } from '../features/catalog/useCatalog.js';
+import { useTheme } from '../shared/context/ThemeContext.js';
+import type { CatalogViewMode, WishlistItem } from '../api/types.js';
 
 export function App() {
     const wishlistBtnRef = useRef<HTMLButtonElement | null>(null);

@@ -1,8 +1,8 @@
 ﻿import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from './App.js';
-import { AuthProvider } from './context/AuthContext.js';
-import { ThemeProvider } from './context/ThemeContext.js';
+import { App } from './app/App.js';
+import { AuthProvider } from './shared/context/AuthContext.js';
+import { ThemeProvider } from './shared/context/ThemeContext.js';
 
 const rootElement = document.getElementById('root');
 
