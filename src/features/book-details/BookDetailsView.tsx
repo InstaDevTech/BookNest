@@ -69,6 +69,7 @@ export function BookDetailsView({
                                             {isInWishlist ? '✓ В желаемом' : '♡ Хочу прочитать'}
                                         </Button>
                                         <Link className="btn btn-secondary" to="/books">&larr; В каталог</Link>
+                                        <Link className="btn btn-outline" to={`/books/${encodeURIComponent(book.id)}/edit`}>Редактировать</Link>
                                     </div>
                                 </section>
                             </div>

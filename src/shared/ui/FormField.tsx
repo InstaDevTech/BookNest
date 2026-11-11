@@ -21,7 +21,7 @@ export function FormField({ id, label, error, hint, children }: FormFieldProps) 
     const describedBy = [hint ? hintId : null, error ? errorId : null].filter(Boolean).join(' ');
 
     return (
-        <div className="form-field">
+        <div className="form-group">
             <label htmlFor={id}>{label}</label>
             {children({
                 id,
@@ -29,7 +29,7 @@ export function FormField({ id, label, error, hint, children }: FormFieldProps) 
                 'aria-describedby': describedBy || undefined,
             })}
             {hint && (
-                <p id={hintId} className="field-hint">
+                <p id={hintId} className="form-hint">
                     {hint}
                 </p>
             )}
