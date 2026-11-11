@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+﻿import { useEffect, useRef, useState } from 'react';
 import { BookDetailsView } from './components/BookDetailsView.js';
 import { CatalogContent } from './components/CatalogContent.js';
 import { FiltersPanel } from './components/FiltersPanel.js';
@@ -7,13 +7,12 @@ import { Modal } from './components/Modal.js';
 import { WishlistContent } from './components/WishlistContent.js';
 import { getVisibleBooks } from './lib/books.js';
 import {
-    loadInitialTheme,
     loadInitialWishlist,
-    saveTheme,
     saveWishlist,
 } from './lib/storage.js';
 import { MIN_QUERY_LENGTH, useCatalogState } from './lib/useCatalog.js';
-import type { CatalogViewMode, ThemeMode, WishlistItem } from './types.js';
+import { useTheme } from './context/ThemeContext.js';
+import type { CatalogViewMode, WishlistItem } from './types.js';
 
 export function App() {
     const wishlistBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -21,17 +20,13 @@ export function App() {
 
     const [wishlist, setWishlist] = useState<WishlistItem[]>(loadInitialWishlist);
     const [isWishlistOpen, setIsWishlistOpen] = useState(false);
-    const [theme, setTheme] = useState<ThemeMode>(loadInitialTheme);
+    const { theme } = useTheme();
     const [viewMode, setViewMode] = useState<CatalogViewMode>('grid');
     const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
 
     useEffect(() => {
         saveWishlist(wishlist);
     }, [wishlist]);
-
-    useEffect(() => {
-        saveTheme(theme);
-    }, [theme]);
 
     // Производные данные вычисляются при рендере
     const visibleBooks = getVisibleBooks(
@@ -55,12 +50,10 @@ export function App() {
                 wishlistCount={wishlist.length}
                 isWishlistOpen={isWishlistOpen}
                 activeView={selectedBookId ? 'details' : 'catalog'}
-                theme={theme}
                 wishlistButtonRef={wishlistBtnRef}
                 onOpenWishlist={() => setIsWishlistOpen(true)}
                 onNavigateCatalog={() => setSelectedBookId(null)}
                 onNavigateDefaultBook={() => setSelectedBookId('OL166894W')}
-                onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
             />
 
             <main className="page-main">

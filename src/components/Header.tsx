@@ -1,5 +1,5 @@
-import type { RefObject } from 'react';
-import type { ThemeMode } from '../types.js';
+﻿import type { RefObject } from 'react';
+import { useTheme } from '../context/ThemeContext.js';
 import { Badge } from './Badge.js';
 import { Button } from './Button.js';
 
@@ -7,25 +7,22 @@ export interface HeaderProps {
     wishlistCount: number;
     isWishlistOpen: boolean;
     activeView: 'catalog' | 'details';
-    theme: ThemeMode;
     wishlistButtonRef?: RefObject<HTMLButtonElement | null>;
     onOpenWishlist: () => void;
     onNavigateCatalog: () => void;
     onNavigateDefaultBook: () => void;
-    onToggleTheme: () => void;
 }
 
 export function Header({
     wishlistCount,
     isWishlistOpen,
     activeView,
-    theme,
     wishlistButtonRef,
     onOpenWishlist,
     onNavigateCatalog,
     onNavigateDefaultBook,
-    onToggleTheme,
 }: HeaderProps) {
+    const { theme, toggleTheme } = useTheme();
     return (
         <header className="page-header">
             <p className="booknest-title">
@@ -68,7 +65,7 @@ export function Header({
                     variant="secondary"
                     size="sm"
                     className="header-wishlist-btn"
-                    onClick={onToggleTheme}
+                    onClick={toggleTheme}
                     aria-label="Переключить цветовую тему"
                 >
                     {theme === 'dark' ? '☀ Светлая' : '🌙 Тёмная'}

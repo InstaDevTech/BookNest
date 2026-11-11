@@ -1,6 +1,8 @@
-import { StrictMode } from 'react';
+﻿import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App.js';
+import { AuthProvider } from './context/AuthContext.js';
+import { ThemeProvider } from './context/ThemeContext.js';
 
 const rootElement = document.getElementById('root');
 
@@ -10,6 +12,10 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
     <StrictMode>
-        <App />
+        <ThemeProvider>
+            <AuthProvider>
+                <App />
+            </AuthProvider>
+        </ThemeProvider>
     </StrictMode>
 );
