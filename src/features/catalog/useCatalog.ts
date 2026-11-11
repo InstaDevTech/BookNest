@@ -1,40 +1,95 @@
-import { useEffect, useState } from 'react';
-import { useBooks } from './useBooks.js';
-import { useDebounce } from '../../shared/hooks/useDebounce.js';
-import { DEFAULT_FILTERS, DEFAULT_SORT, loadInitialSettings, saveSettings } from '../../shared/lib/storage.js';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import type { CatalogFilters, GenreFilter, SortOption, UiState } from '../../api/types.js';
+import { useDebounce } from '../../shared/hooks/useDebounce.js';
+import { GENRES } from '../../shared/lib/books.js';
+import { DEFAULT_SORT } from '../../shared/lib/storage.js';
+import { useBooks } from './useBooks.js';
 
 export const DEBOUNCE_DELAY_MS = 350;
 export const MIN_QUERY_LENGTH = 2;
 
+const SORT_OPTIONS: readonly SortOption[] = ['title', 'year', 'rating'];
+
+function parseGenre(raw: string | null): GenreFilter {
+    return raw !== null && Object.hasOwn(GENRES, raw) ? (raw as GenreFilter) : '';
+}
+
+function parseSort(raw: string | null): SortOption {
+    return SORT_OPTIONS.find((option) => option === raw) ?? DEFAULT_SORT;
+}
+
+function parsePage(raw: string | null): number {
+    const value = Number.parseInt(raw ?? '', 10);
+    return Number.isFinite(value) && value > 0 ? value : 1;
+}
+
+type ParamsPatch = Record<string, string | null>;
+
+/**
+ * Состояние каталога хранится в URL: ?q=...&genre=...&sort=...&available=1&page=2.
+ * Ссылка на отфильтрованный каталог воспроизводит состояние в любой вкладке.
+ */
 export function useCatalogState() {
-    const initial = loadInitialSettings();
-    const [page, setPage] = useState(1);
-    const [appendMode, setAppendMode] = useState(false);
+    const [params, setParams] = useSearchParams();
 
-    const [searchDraft, setSearchDraft] = useState(initial.filters.query);
-    const [filters, setFilters] = useState<CatalogFilters>(initial.filters);
-    const [sortBy, setSortBy] = useState<SortOption>(initial.sortBy);
+    const query = params.get('q') ?? '';
+    const genre = parseGenre(params.get('genre'));
+    const sortBy = parseSort(params.get('sort'));
+    const onlyAvailable = params.get('available') === '1';
+    const page = parsePage(params.get('page'));
 
-    // Поисковый запрос применяется после паузы в наборе; слишком короткий запрос игнорируется
-    const debouncedDraft = useDebounce(searchDraft.trim(), DEBOUNCE_DELAY_MS);
-    const [appliedDraft, setAppliedDraft] = useState(debouncedDraft);
-    if (debouncedDraft !== appliedDraft) {
-        setAppliedDraft(debouncedDraft);
-        if (debouncedDraft.length === 0 || debouncedDraft.length >= MIN_QUERY_LENGTH) {
-            setPage(1);
-            setAppendMode(false);
-            setFilters((prev) => (prev.query === debouncedDraft ? prev : { ...prev, query: debouncedDraft }));
-        }
+    // Накопительная загрузка действует, пока не сменились фильтры: ключ сбрасывает её автоматически
+    const filterKey = `|${genre}|${sortBy}`;
+    const [appendKey, setAppendKey] = useState<string | null>(null);
+    const appendMode = appendKey === filterKey && page > 1;
+
+    const filters = useMemo<CatalogFilters>(
+        () => ({ query, genre, onlyAvailable }),
+        [query, genre, onlyAvailable]
+    );
+
+    const updateParams = useCallback(
+        (patch: ParamsPatch, options: { keepPage?: boolean; replace?: boolean } = {}) => {
+            setParams(
+                (prev) => {
+                    const next = new URLSearchParams(prev);
+                    Object.entries(patch).forEach(([key, value]) => {
+                        if (value === null || value === '') next.delete(key);
+                        else next.set(key, value);
+                    });
+                    if (!options.keepPage) next.delete('page');
+                    return next;
+                },
+                { replace: options.replace ?? false }
+            );
+        },
+        [setParams]
+    );
+
+    // Черновик поискового запроса: в URL попадает после паузы в наборе
+    const [searchDraft, setSearchDraft] = useState(query);
+    const [syncedQuery, setSyncedQuery] = useState(query);
+    if (query !== syncedQuery) {
+        // URL изменился извне (кнопка «назад», ссылка) - подтягиваем черновик
+        setSyncedQuery(query);
+        setSearchDraft(query);
     }
 
+    const trimmedDraft = searchDraft.trim();
+    const debouncedDraft = useDebounce(trimmedDraft, DEBOUNCE_DELAY_MS);
+
     useEffect(() => {
-        saveSettings(filters, sortBy);
-    }, [filters, sortBy]);
+        const isSettled = debouncedDraft === trimmedDraft;
+        const isValid = trimmedDraft.length === 0 || trimmedDraft.length >= MIN_QUERY_LENGTH;
+        if (isSettled && isValid && trimmedDraft !== query) {
+            updateParams({ q: trimmedDraft }, { replace: true });
+        }
+    }, [debouncedDraft, trimmedDraft, query, updateParams]);
 
     const { data, error, status, reload } = useBooks({
-        query: filters.query,
-        genre: filters.genre,
+        query,
+        genre,
         sort: sortBy,
         page,
         append: appendMode,
@@ -50,37 +105,33 @@ export function useCatalogState() {
         : status === 'loading' ? 'loading'
         : books.length === 0 ? 'empty'
         : 'success';
-    const handleGenreChange = (genre: GenreFilter) => {
-        setPage(1);
-        setAppendMode(false);
-        setFilters((p) => ({ ...p, genre }));
+
+    const handleGenreChange = (next: GenreFilter) => {
+        updateParams({ genre: next });
     };
 
     const handleSortChange = (sort: SortOption) => {
-        setPage(1);
-        setAppendMode(false);
-        setSortBy(sort);
+        updateParams({ sort: sort === DEFAULT_SORT ? null : sort });
     };
 
-    const handleAvailableChange = (onlyAvailable: boolean) => {
-        setFilters((p) => ({ ...p, onlyAvailable }));
+    const handleAvailableChange = (next: boolean) => {
+        updateParams({ available: next ? '1' : null });
     };
 
     const handleSubmitSearch = () => {
-        const trimmed = searchDraft.trim();
-        if (trimmed.length === 0 || trimmed.length >= MIN_QUERY_LENGTH) {
-            setPage(1);
-            setAppendMode(false);
-            setFilters((p) => ({ ...p, query: trimmed }));
+        if (trimmedDraft.length === 0 || trimmedDraft.length >= MIN_QUERY_LENGTH) {
+            updateParams({ q: trimmedDraft });
         }
     };
 
     const handleResetFilters = () => {
         setSearchDraft('');
-        setFilters(DEFAULT_FILTERS);
-        setSortBy(DEFAULT_SORT);
-        setPage(1);
-        setAppendMode(false);
+        setParams(new URLSearchParams());
+    };
+
+    const goToPage = (next: number, append: boolean) => {
+        setAppendKey(append ? filterKey : null);
+        updateParams({ page: next > 1 ? String(next) : null }, { keepPage: true });
     };
 
     return {
@@ -101,9 +152,8 @@ export function useCatalogState() {
         handleSubmitSearch,
         handleResetFilters,
         handleRetry: reload,
-        handlePrevPage: () => { setAppendMode(false); setPage((p) => Math.max(1, p - 1)); },
-        handleNextPage: () => { setAppendMode(false); setPage((p) => Math.min(totalPages, p + 1)); },
-        handleLoadMore: () => { setAppendMode(true); setPage((p) => Math.min(totalPages, p + 1)); },
+        handlePrevPage: () => goToPage(Math.max(1, page - 1), false),
+        handleNextPage: () => goToPage(Math.min(totalPages, page + 1), false),
+        handleLoadMore: () => goToPage(Math.min(totalPages, page + 1), true),
     };
 }
-

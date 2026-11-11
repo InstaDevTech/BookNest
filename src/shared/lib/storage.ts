@@ -1,14 +1,7 @@
-import type { CatalogFilters, SortOption, ThemeMode, WishlistItem } from '../../api/types.js';
+import type { SortOption, ThemeMode, WishlistItem } from '../../api/types.js';
 
-const STORAGE_KEY_FILTERS = 'booknest_filters_v5';
 const STORAGE_KEY_WISHLIST = 'booknest_wishlist_v4';
 const STORAGE_KEY_THEME = 'booknest_theme_v5';
-
-export const DEFAULT_FILTERS: CatalogFilters = {
-    query: '',
-    genre: '',
-    onlyAvailable: false,
-};
 
 export const DEFAULT_SORT: SortOption = 'title';
 
@@ -28,25 +21,6 @@ export function saveToStorage<T>(key: string, value: T): void {
     } catch {
         // Игнорируем ошибку переполнения квоты localStorage
     }
-}
-
-export function loadInitialSettings(): { filters: CatalogFilters; sortBy: SortOption } {
-    const saved = loadFromStorage<{ filters?: Partial<CatalogFilters>; sortBy?: SortOption }>(
-        STORAGE_KEY_FILTERS,
-        {}
-    );
-    return {
-        filters: {
-            query: typeof saved.filters?.query === 'string' ? saved.filters.query : '',
-            genre: saved.filters?.genre ?? '',
-            onlyAvailable: Boolean(saved.filters?.onlyAvailable),
-        },
-        sortBy: saved.sortBy ?? DEFAULT_SORT,
-    };
-}
-
-export function saveSettings(filters: CatalogFilters, sortBy: SortOption): void {
-    saveToStorage(STORAGE_KEY_FILTERS, { filters, sortBy });
 }
 
 export function loadInitialWishlist(): WishlistItem[] {
