@@ -1,3 +1,4 @@
+﻿import { Link, useNavigate } from 'react-router-dom';
 import type { WishlistItem } from '../../api/types.js';
 import { Button } from '../../shared/ui/Button.js';
 import { EmptyState } from '../../shared/ui/EmptyState.js';
@@ -5,23 +6,18 @@ import { EmptyState } from '../../shared/ui/EmptyState.js';
 export interface WishlistContentProps {
     items: readonly WishlistItem[];
     onRemove: (bookId: string) => void;
-    onSelectBook: (bookId: string) => void;
-    onClose: () => void;
 }
 
-export function WishlistContent({
-    items,
-    onRemove,
-    onSelectBook,
-    onClose,
-}: WishlistContentProps) {
+export function WishlistContent({ items, onRemove }: WishlistContentProps) {
+    const navigate = useNavigate();
+
     if (items.length === 0) {
         return (
             <EmptyState
                 title="Ваш список пока пуст"
                 description="Добавьте понравившиеся книги кнопкой «Хочу прочитать» на карточке издания."
                 actionLabel="Перейти к книгам"
-                onAction={onClose}
+                onAction={() => navigate('/books')}
             />
         );
     }
@@ -30,17 +26,9 @@ export function WishlistContent({
         <ul className="wishlist-list">
             {items.map((item) => (
                 <li key={item.id} className="wishlist-item">
-                    <a
-                        href={`#book/${encodeURIComponent(item.id)}`}
-                        className="wishlist-item-title"
-                        onClick={(event) => {
-                            event.preventDefault();
-                            onSelectBook(item.id);
-                            onClose();
-                        }}
-                    >
+                    <Link to={`/books/${encodeURIComponent(item.id)}`} className="wishlist-item-title">
                         {item.title} ({item.author})
-                    </a>
+                    </Link>
 
                     <Button
                         variant="danger"
