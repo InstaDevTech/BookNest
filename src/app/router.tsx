@@ -1,12 +1,20 @@
+import { lazy } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 import { BookPage } from '../pages/BookPage.js';
-import { BookCreatePage, BookEditPage } from '../pages/BookFormPages.js';
 import { CatalogPage } from '../pages/CatalogPage.js';
 import { LoginPage } from '../pages/LoginPage.js';
 import { NotFoundPage } from '../pages/NotFoundPage.js';
 import { WishlistPage } from '../pages/WishlistPage.js';
 import { Layout } from './layout/Layout.js';
 import { RequireAuth } from './RequireAuth.js';
+
+// Маршруты форм загружаются лениво: react-hook-form и zod не попадают в основной бандл
+const BookCreatePage = lazy(() =>
+    import('../pages/BookFormPages.js').then((m) => ({ default: m.BookCreatePage }))
+);
+const BookEditPage = lazy(() =>
+    import('../pages/BookFormPages.js').then((m) => ({ default: m.BookEditPage }))
+);
 
 export const router = createBrowserRouter([
     {

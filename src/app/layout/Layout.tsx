@@ -1,4 +1,6 @@
+import { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
+import { Spinner } from '../../shared/ui/Spinner.js';
 import { useTheme } from '../../shared/context/ThemeContext.js';
 import { Header } from './Header.js';
 
@@ -10,7 +12,9 @@ export function Layout() {
             <Header />
 
             <main className="page-main">
-                <Outlet />
+                <Suspense fallback={<Spinner title="Загружаем страницу..." subtitle="" />}>
+                    <Outlet />
+                </Suspense>
             </main>
 
             <footer className="page-footer">
