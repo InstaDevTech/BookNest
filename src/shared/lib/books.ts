@@ -1,4 +1,4 @@
-import type { Book, CatalogFilters, GenreKey, SortOption } from '../../api/types.js';
+import type { Book, CatalogFilters, SortOption } from '../../api/types.js';
 import { GENRES } from '../../api/genres.js';
 
 export { GENRES };
